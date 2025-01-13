@@ -31,8 +31,8 @@ namespace BondEngine
         std::shared_ptr<Texture2D> _texture;
         std::shared_ptr<ShaderProgram> _shaderProgram;
 
-        const std::filesystem::path _vertexShaderPath{ "assets/shaders/vertexSprite.vert" };
-        const std::filesystem::path _fragmentShaderPath{ "assets/shaders/fragmentSprite.frag" };
+        const std::filesystem::path _vertexShaderPath{ "assets/Shaders/vertexSprite.vert" };
+        const std::filesystem::path _fragmentShaderPath{ "assets/Shaders/fragmentSprite.frag" };
 
         VAO _vao{};
         IBO _ibo{};

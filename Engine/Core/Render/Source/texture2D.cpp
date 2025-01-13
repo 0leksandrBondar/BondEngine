@@ -1,11 +1,14 @@
 #include "texture2D.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_ONLY_PNG
 #include "stb_image.h"
 
 #include <algorithm>
 
 namespace BondEngine
 {
+    Texture2D::Texture2D() { loadTexture(_defaultTexturePath); }
 
     Texture2D::Texture2D(const GLuint width, const GLuint height, const unsigned char* data,
                          unsigned int channels, const GLenum filter, const GLenum wrapMode)
@@ -14,7 +17,9 @@ namespace BondEngine
         intialize(width, height, data, channels, filter, wrapMode);
     }
 
-    Texture2D::Texture2D(const std::filesystem::path& path)
+    Texture2D::Texture2D(const std::filesystem::path& path) { loadTexture(path); }
+
+    void Texture2D::loadTexture(const std::filesystem::path& path)
     {
         stbi_set_flip_vertically_on_load(true);
         unsigned char* pixels = stbi_load(path.string().c_str(), &_width, &_height, &channels, 0);

@@ -45,7 +45,7 @@ namespace BondEngine
         // clang-format on
 
         initDefaultShaderProgram();
-        const glm::mat4 projection = glm::ortho(0.f, 940.f, 0.f, 800.f, -100.f, 100.f);
+        const glm::mat4 projection = glm::ortho(0.f, 940.f, 800.f, 0.f, -100.f, 100.f);
 
         _shaderProgram->use();
         _shaderProgram->setInt("tex", 0);

@@ -11,7 +11,7 @@ namespace BondEngine
     class Texture2D : public NonCopyable
     {
     public:
-        Texture2D() = delete;
+        Texture2D();
 
         Texture2D(const GLuint width, const GLuint height, const unsigned char* data,
                   unsigned int channels = 4, const GLenum filter = GL_LINEAR,
@@ -28,6 +28,7 @@ namespace BondEngine
         void unbind() const;
 
     private:
+        void loadTexture(const std::filesystem::path& path);
         void intialize(const GLuint width, const GLuint height, const unsigned char* data,
                        unsigned int channels = 4, const GLenum filter = GL_LINEAR,
                        const GLenum wrapMode = GL_CLAMP_TO_EDGE);
@@ -37,5 +38,7 @@ namespace BondEngine
         GLuint _id{ 0 };
         int channels{ 0 };
         int _width{ 0 }, _height{ 0 };
+
+        const std::filesystem::path _defaultTexturePath{ "assets/Textures/DefaultTexture.png" };
     };
 } // namespace BondEngine
