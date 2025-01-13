@@ -5,16 +5,16 @@ file(
 )
 
 add_library(
-        Interfaces STATIC
+        Render STATIC
         ${Sources})
 
 target_include_directories(
-        Interfaces PUBLIC
+        Render PUBLIC
         include)
 
-        
 target_link_libraries(
-        Interfaces PUBLIC
-        Utils 
+        Render PUBLIC
+        Interfaces
+        OpenGlWrappers
 )
-
+ 

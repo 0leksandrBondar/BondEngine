@@ -17,7 +17,7 @@ namespace BondEngine
 
     VAO::~VAO() { glDeleteVertexArrays(1, &_id); }
 
-    void VAO::addBuffer(const VAO& vertexBuffer, const VertexBufferLayout& layout)
+    void VAO::addBuffer(const VBO& vertexBuffer, const VertexBufferLayout& layout)
     {
         bind();
         vertexBuffer.bind();

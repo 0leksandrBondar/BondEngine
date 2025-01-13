@@ -4,6 +4,8 @@
 #include "noncopyable.h"
 #include "vertexbuufferlayout.h"
 
+#include "vbo.h"
+
 namespace BondEngine
 {
     class VAO final : public NonCopyable
@@ -14,7 +16,7 @@ namespace BondEngine
         VAO& operator=(VAO&& other) noexcept;
         ~VAO();
 
-        void addBuffer(const VAO& vertexBuffer, const VertexBufferLayout& layout);
+        void addBuffer(const VBO& vertexBuffer, const VertexBufferLayout& layout);
 
         void bind() const;
         void unbind() const;
