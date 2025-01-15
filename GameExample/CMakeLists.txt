@@ -2,13 +2,15 @@ cmake_minimum_required(VERSION 3.20...3.30)
 
 project(GameExample)
 
-set(SOURCES main.cpp)
+set(SOURCES main.cpp
+        mainwindow.cpp
+        mainwindow.h)
 
 add_executable(GameExample ${SOURCES})
 
 target_link_libraries(GameExample PRIVATE
-Window
-Render
+        Window
+        Render
 )
 
 # TODO: move it to engine lib
