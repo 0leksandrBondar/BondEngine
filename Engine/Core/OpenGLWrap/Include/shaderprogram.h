@@ -9,14 +9,14 @@
 
 namespace BondEngine
 {
-    class ShaderProgram : public NonCopyable
+    class ShaderProgram final : public NonCopyable
     {
     public:
         ShaderProgram(const std::string& vertexShaderSource,
                       const std::string& fragmentShaderSource);
         ShaderProgram(ShaderProgram&& other) noexcept;
         ShaderProgram& operator=(ShaderProgram&& other) noexcept;
-        ~ShaderProgram();
+        ~ShaderProgram() override;
 
         void use() const;
         void setInt(const std::string& name, int value) const;
@@ -33,4 +33,4 @@ namespace BondEngine
         bool _isCompiled{ false };
     };
 
-} // namespace engine::renderer
+} // namespace BondEngine
