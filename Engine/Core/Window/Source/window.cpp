@@ -27,6 +27,8 @@ namespace BondEngine
 
         if (!utils::initGLAD())
             std::cerr << "Failed to initialize GLAD" << std::endl;
+
+        utils::initDefaultResources();
     }
 
     Window::~Window() { glfwTerminate(); }

@@ -15,6 +15,8 @@ target_include_directories(
         
 target_link_libraries(
         Interfaces PUBLIC
-        Utils 
+        Utils
+        OpenGlWrappers
+        ResourceManager
 )
 

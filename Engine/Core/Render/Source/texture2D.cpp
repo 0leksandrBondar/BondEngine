@@ -8,8 +8,6 @@
 
 namespace BondEngine
 {
-    Texture2D::Texture2D() { loadTexture(_defaultTexturePath); }
-
     Texture2D::Texture2D(const GLuint width, const GLuint height, const unsigned char* data,
                          unsigned int channels, const GLenum filter, const GLenum wrapMode)
         : _width(width), _height(height)

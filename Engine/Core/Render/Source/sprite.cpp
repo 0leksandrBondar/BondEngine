@@ -44,7 +44,6 @@ namespace BondEngine
 
         // clang-format on
 
-        initDefaultShaderProgram();
         const glm::mat4 projection = glm::ortho(0.f, 940.f, 800.f, 0.f, -100.f, 100.f);
 
         _shaderProgram->use();
@@ -67,7 +66,7 @@ namespace BondEngine
         _ibo.unbind();
     }
 
-    void Sprite::render() const
+    void Sprite::draw() const
     {
         _shaderProgram->use();
         auto model = glm::mat4(1.0f);
@@ -86,14 +85,6 @@ namespace BondEngine
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         _vao.unbind();
-    }
-
-    void Sprite::initDefaultShaderProgram()
-    {
-        _shaderProgram
-            = std::make_shared<ShaderProgram>(utils::getShaderProgramSourceCode(_vertexShaderPath),
-                                              utils::getShaderProgramSourceCode(
-                                                  _fragmentShaderPath));
     }
 
 } // namespace BondEngine

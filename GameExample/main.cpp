@@ -11,19 +11,19 @@ public:
         : BondEngine::Window(width, height, title)
     {
         std::cout << glGetString(GL_RENDERER) << std::endl;
-        _texture = std::make_shared<BondEngine::Texture2D>();
+        _texture = std::make_shared<BondEngine::Texture2D>("assets/Textures/DefaultTexture.png");
         _sprite = std::make_shared<BondEngine::Sprite>(_texture);
         _sprite->setSize(450, 350);
-        _sprite->setPosition(0,0);
+        _sprite->setPosition(0, 0);
     }
 
     ~Window() override {}
 
-    void draw() { _sprite->render(); }
+    void draw() { _sprite->draw(); }
 
     void mouseMoveEvent(const BondEngine::MouseMovedEvent& event) override
     {
-        std::cout << event.getX() << " : " <<  event.getY() << std::endl;
+        std::cout << event.getX() << " : " << event.getY() << std::endl;
         _sprite->setPosition(event.getX(), event.getY());
     }
     void mousePressEvent(const BondEngine::MouseButtonPressedEvent& event) override
@@ -39,7 +39,7 @@ private:
 
 int main()
 {
-    auto window = std::make_unique<Window>(800, 600, "Hello World!");
+    const auto window = std::make_unique<Window>(800, 600, "Hello World!");
 
     while (!window->windowShouldClose())
     {
