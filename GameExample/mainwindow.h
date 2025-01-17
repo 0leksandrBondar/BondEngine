@@ -19,5 +19,5 @@ public:
 
 private:
     std::shared_ptr<BondEngine::Sprite> _sprite;
-    std::shared_ptr<BondEngine::Texture2D> _texture;
+    std::shared_ptr<BondEngine::Sprite> _sprite2;
 };

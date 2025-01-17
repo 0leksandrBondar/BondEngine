@@ -33,80 +33,67 @@
 
 namespace BondEngine
 {
+    constexpr GLfloat vertexCoords[] = {
+        0.0f, 0.f, 0.0f, 1.f, 1.0f, 1.f, 1.0f, 0.f,
+    };
+
+    constexpr GLfloat textureCoords[] = {
+        0.0f, 0.f, 0.0f, 1.f, 1.0f, 1.f, 1.0f, 0.f,
+    };
+
+    const GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
 
     Sprite::Sprite(const std::shared_ptr<Texture2D>& texture) : _texture{ texture }
     {
-        // clang-format off
-
-        // 1--2
-        // | /|
-        // 0-3
-
-        // X Y
-
-         constexpr GLfloat vertexCoords[] =
-        {
-            0.0f,  0.f,
-            0.0f,  1.f,
-            1.0f,  1.f,
-
-            1.0f,  0.f,
-        };
-
-         constexpr GLfloat textureCoords[] =
-        {
-            // U V
-            0.0f,  0.f,
-            0.0f,  1.f,
-            1.0f,  1.f,
-            1.0f,  0.f,
-        };
-
-        const GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
-
-        // clang-format on
-
-        const glm::mat4 projection = glm::ortho(0.f, 940.f, 800.f, 0.f, -100.f, 100.f);
+        const glm::mat4 projection = glm::ortho(0.f, 800.f, 600.f, 0.f, -100.f, 100.f);
 
         _shaderProgram->use();
         _shaderProgram->setInt("tex", 0);
         _shaderProgram->setMatrix4("projectionMat", projection);
 
-        _vbo.init(vertexCoords, 2 * 4 * sizeof(GLfloat));
-        VertexBufferLayout vertexCoordsLayout;
-        vertexCoordsLayout.addElementLayoutFloat(2, false);
-        _vao.addBuffer(_vbo, vertexCoordsLayout);
-
-        _tvbo.init(textureCoords, 2 * 4 * sizeof(GLfloat));
-        VertexBufferLayout textureCoordsLayout;
-        textureCoordsLayout.addElementLayoutFloat(2, false);
-        _vao.addBuffer(_tvbo, textureCoordsLayout);
-
-        _ibo.init(indices, 6 * sizeof(GLfloat));
-
-        _vao.unbind();
-        _ibo.unbind();
+        setupBuffers();
     }
 
-    void Sprite::draw() const
+    void Sprite::draw()
     {
         _shaderProgram->use();
-        auto model = glm::mat4(1.0f);
-
-        model = glm::translate(model, glm::vec3(_position, 0.0f));
-        model = glm::translate(model, glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.0f));
-        model = glm::rotate(model, glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f));
-        model = glm::translate(model, glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.0f));
-        model = glm::scale(model, glm::vec3(_size, 1.0f));
+        _shaderProgram->setMatrix4("modelMat", calculateModelMatrix());
 
         _vao.bind();
-        _shaderProgram->setMatrix4("modelMat", model);
 
         glActiveTexture(GL_TEXTURE0);
         _texture->bind();
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         _vao.unbind();
+    }
+
+    void Sprite::setupBuffers()
+    {
+        _vbo.init(vertexCoords, sizeof(vertexCoords));
+        VertexBufferLayout vertexCoordsLayout;
+        vertexCoordsLayout.addElementLayoutFloat(2, false);
+        _vao.addBuffer(_vbo, vertexCoordsLayout);
+
+        _tvbo.init(textureCoords, sizeof(textureCoords));
+        VertexBufferLayout textureCoordsLayout;
+        textureCoordsLayout.addElementLayoutFloat(2, false);
+        _vao.addBuffer(_tvbo, textureCoordsLayout);
+
+        _ibo.init(indices, sizeof(indices));
+        _vao.unbind();
+        _ibo.unbind();
+    }
+
+    glm::mat4 Sprite::calculateModelMatrix() const
+    {
+        auto model = glm::mat4(1.0f);
+
+        model = glm::translate(model, glm::vec3(_position, 0.0f));
+        model = glm::translate(model, glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.0f));
+        model = glm::rotate(model, glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f));
+        model = glm::translate(model, glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.0f));
+        return glm::scale(model, glm::vec3(_size, 1.0f));
     }
 
 } // namespace BondEngine

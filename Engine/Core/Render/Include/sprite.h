@@ -26,6 +26,8 @@
 #include "noncopyable.h"
 #include "transformable.h"
 
+#include "glm/mat4x4.hpp"
+
 namespace BondEngine
 {
     class Texture2D;
@@ -36,10 +38,13 @@ namespace BondEngine
     public:
         Sprite() = default;
 
-        Sprite(const std::shared_ptr<Texture2D>& texture);
+        explicit Sprite(const std::shared_ptr<Texture2D>& texture);
 
-        void draw() const override;
+        void draw() override;
 
+    private:
+        void setupBuffers();
+        glm::mat4 calculateModelMatrix() const;
 
     private:
         std::shared_ptr<Texture2D> _texture;

@@ -1,15 +1,21 @@
 #include "mainwindow.h"
 
 Window::Window(const int width, const int height, const char* title)
-    : BondEngine::Window(width, height, title)
+    : BondEngine::Window(width, height, title),
+      _sprite(std::make_shared<BondEngine::Sprite>(
+          std::make_shared<BondEngine::Texture2D>("assets/Textures/DefaultTexture.png"))),
+      _sprite2(std::make_shared<BondEngine::Sprite>(
+          std::make_shared<BondEngine::Texture2D>("assets/Textures/DefaultTexture.png")))
 {
-    _texture = std::make_shared<BondEngine::Texture2D>("assets/Textures/DefaultTexture.png");
-    _sprite = std::make_shared<BondEngine::Sprite>(_texture);
     _sprite->setSize(450, 350);
-    _sprite->setPosition(0, 0);
+    _sprite2->setSize(450, 350);
 }
 
-void Window::draw() { _sprite->draw(); }
+void Window::draw()
+{
+    _sprite->draw();
+    _sprite2->draw();
+}
 
 void Window::startGameLoop()
 {
