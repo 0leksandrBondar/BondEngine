@@ -8,6 +8,8 @@ namespace BondEngine
 
     const float Transformable::getRotation() const { return _rotation; }
 
+    const glm::vec2& Transformable::getSize() const { return _size; }
+
     const glm::vec2& Transformable::getScale() const { return _scale; }
 
     const glm::vec2& Transformable::getPosition() const { return _position; }

@@ -12,12 +12,14 @@ public:
     ~Window() override = default;
 
     void draw();
+    void drawDebugMatrixView();
+
     void startGameLoop();
 
     void mouseMoveEvent(const BondEngine::MouseMovedEvent& event) override;
     void mousePressEvent(const BondEngine::MouseButtonPressedEvent& event) override;
 
 private:
-    std::shared_ptr<BondEngine::Sprite> _sprite;
-    std::shared_ptr<BondEngine::Sprite> _sprite2;
+    std::shared_ptr<BondEngine::Sprite> _scalingSprite;
+    std::shared_ptr<BondEngine::Sprite> _rotationSprite;
 };

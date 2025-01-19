@@ -53,6 +53,9 @@ namespace BondEngine
         virtual void windowCloseEvent(const WindowClosedEvent& event) {}
         virtual void windowResizeEvent(const WindowResizedEvent& event) {}
 
+        static float getWidth() { return _width; };
+        static float getHeight() { return _height; };
+
     private:
         void initCallbacks() const;
 
@@ -67,5 +70,8 @@ namespace BondEngine
     private:
         std::string _title{};
         GLFWwindow* _window{ nullptr };
+
+    private:
+        static float _width, _height;
     };
 } // namespace BondEngine

@@ -21,13 +21,14 @@ namespace BondEngine
         void setPosition(const float x, const float y);
 
         [[nodiscard]] const float getRotation() const;
+        [[nodiscard]] const glm::vec2& getSize() const;
         [[nodiscard]] const glm::vec2& getScale() const;
         [[nodiscard]] const glm::vec2& getPosition() const;
 
     protected:
         float _rotation{};
         glm::vec2 _size{};
-        glm::vec2 _scale{};
+        glm::vec2 _scale{ 1.f };
         glm::vec2 _position{};
     };
 } // namespace BondEngine

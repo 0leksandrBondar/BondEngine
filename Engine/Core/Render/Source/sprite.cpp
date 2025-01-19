@@ -26,6 +26,7 @@
 #include "shaderprogram.h"
 #include "utils.h"
 #include "vertexbuufferlayout.h"
+#include "window.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -45,7 +46,8 @@ namespace BondEngine
 
     Sprite::Sprite(const std::shared_ptr<Texture2D>& texture) : _texture{ texture }
     {
-        const glm::mat4 projection = glm::ortho(0.f, 800.f, 600.f, 0.f, -100.f, 100.f);
+        const glm::mat4 projection
+            = glm::ortho(0.f, Window::getWidth(), Window::getHeight(), 0.f, -100.f, 100.f);
 
         _shaderProgram->use();
         _shaderProgram->setInt("tex", 0);
@@ -93,7 +95,8 @@ namespace BondEngine
         model = glm::translate(model, glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.0f));
         model = glm::rotate(model, glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f));
         model = glm::translate(model, glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.0f));
-        return glm::scale(model, glm::vec3(_size, 1.0f));
+        model = glm::scale(model, glm::vec3(_size * _scale, 1.0f));
+        return model;
     }
 
 } // namespace BondEngine

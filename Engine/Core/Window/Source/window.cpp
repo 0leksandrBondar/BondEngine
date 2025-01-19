@@ -31,9 +31,14 @@
 
 namespace BondEngine
 {
+    float Window::_width = 0.0f;
+    float Window::_height = 0.0f;
 
     Window::Window(const int width, const int height, const char* title)
     {
+        _width = width;
+        _height = height;
+
         utils::initGLFW();
         _window = glfwCreateWindow(width, height, title, nullptr, nullptr);
         if (!_window)
