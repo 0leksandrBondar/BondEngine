@@ -12,9 +12,9 @@ public:
     ~Window() override = default;
 
     void draw();
-    void drawDebugMatrixView();
+    void drawDebugMatrixView() const;
 
-    void startGameLoop();
+    void startGameLoop() const;
 
     void mouseMoveEvent(const BondEngine::MouseMovedEvent& event) override;
     void mousePressEvent(const BondEngine::MouseButtonPressedEvent& event) override;

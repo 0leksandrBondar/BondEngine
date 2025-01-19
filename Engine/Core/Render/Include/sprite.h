@@ -33,7 +33,7 @@ namespace BondEngine
     class Texture2D;
     class ShaderProgram;
 
-    class Sprite : public Drawable, public Transformable, public NonCopyable
+    class Sprite final : public Drawable, public Transformable, public NonCopyable
     {
     public:
         Sprite() = default;
@@ -44,7 +44,6 @@ namespace BondEngine
 
     private:
         void setupBuffers();
-        glm::mat4 calculateModelMatrix() const;
 
     private:
         std::shared_ptr<Texture2D> _texture;

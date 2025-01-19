@@ -20,7 +20,7 @@ void Window::draw()
     _rotationSprite->draw();
 }
 
-void Window::drawDebugMatrixView()
+void Window::drawDebugMatrixView() const
 {
     using namespace std::chrono;
 
@@ -38,11 +38,11 @@ void Window::drawDebugMatrixView()
     _scalingSprite->draw();
 }
 
-void Window::startGameLoop()
+void Window::startGameLoop() const
 {
     while (!windowShouldClose())
     {
-        glClearColor(0.5f, .0f, 0.5f, 1.0f);
+        glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawDebugMatrixView();

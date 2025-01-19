@@ -59,11 +59,9 @@ namespace BondEngine
     void Sprite::draw()
     {
         _shaderProgram->use();
-        _shaderProgram->setMatrix4("modelMat", calculateModelMatrix());
+        _shaderProgram->setMatrix4("modelMat", getTransformMatrix());
 
         _vao.bind();
-
-        glActiveTexture(GL_TEXTURE0);
         _texture->bind();
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
@@ -85,18 +83,6 @@ namespace BondEngine
         _ibo.init(indices, sizeof(indices));
         _vao.unbind();
         _ibo.unbind();
-    }
-
-    glm::mat4 Sprite::calculateModelMatrix() const
-    {
-        auto model = glm::mat4(1.0f);
-
-        model = glm::translate(model, glm::vec3(_position, 0.0f));
-        model = glm::translate(model, glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.0f));
-        model = glm::rotate(model, glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f));
-        model = glm::translate(model, glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.0f));
-        model = glm::scale(model, glm::vec3(_size * _scale, 1.0f));
-        return model;
     }
 
 } // namespace BondEngine
