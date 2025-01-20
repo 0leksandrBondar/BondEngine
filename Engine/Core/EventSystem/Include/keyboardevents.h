@@ -9,7 +9,6 @@ namespace BondEngine
     public:
         explicit KeyPressEvent(int key);
 
-    private:
         int _key;
     };
 

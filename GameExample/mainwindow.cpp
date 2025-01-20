@@ -1,9 +1,13 @@
 #include "mainwindow.h"
 
+#include "camera2d.h"
 #include "glm/ext/scalar_constants.hpp"
+#include "sprite.h"
+#include "texture2D.h"
 
 Window::Window(const int width, const int height, const char* title)
     : BondEngine::Window(width, height, title),
+      _camera{ std::make_shared<BondEngine::Camera2D>() },
       _scalingSprite(std::make_shared<BondEngine::Sprite>(
           std::make_shared<BondEngine::Texture2D>("assets/Textures/DefaultTexture.png"))),
       _rotationSprite(std::make_shared<BondEngine::Sprite>(
@@ -11,7 +15,8 @@ Window::Window(const int width, const int height, const char* title)
 {
     _scalingSprite->setSize(250, 150);
     _rotationSprite->setSize(250, 150);
-    _scalingSprite->setPosition(_scalingSprite->getSize().x * 2.f, _rotationSprite->getPosition().y);
+    _scalingSprite->setPosition(_scalingSprite->getSize().x * 2.f,
+                                _rotationSprite->getPosition().y);
 }
 
 void Window::draw()
@@ -51,6 +56,8 @@ void Window::startGameLoop() const
         pollEvents();
     }
 }
+
+void Window::keyPressEvent(const BondEngine::KeyPressEvent& event) { _camera->move(event); }
 
 void Window::mouseMoveEvent(const BondEngine::MouseMovedEvent& event) {}
 

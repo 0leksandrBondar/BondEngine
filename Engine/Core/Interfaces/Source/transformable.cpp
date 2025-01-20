@@ -1,7 +1,5 @@
 #include "transformable.h"
 
-#include "glm/gtc/matrix_transform.hpp"
-
 namespace BondEngine
 {
     void Transformable::setPosition(const glm::vec2& position)

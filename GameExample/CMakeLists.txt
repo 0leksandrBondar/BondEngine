@@ -11,6 +11,7 @@ add_executable(GameExample ${SOURCES})
 target_link_libraries(GameExample PRIVATE
         Window
         Render
+        Camera
 )
 
 # TODO: move it to engine lib
