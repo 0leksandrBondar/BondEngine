@@ -100,7 +100,7 @@ namespace BondEngine
     void Window::mouseScrollCallback(GLFWwindow* window, double x, double y)
     {
         auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        MouseScrolledEvent event(y);
+        MouseScrolledEvent event(x,y);
         windowPtr->mouseWheelEvent(event);
     }
 

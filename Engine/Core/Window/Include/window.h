@@ -42,16 +42,16 @@ namespace BondEngine
         [[nodiscard]] const GLFWwindow* getWindow() const;
         [[nodiscard]] int windowShouldClose() const;
 
-        virtual void mouseMoveEvent(const MouseMovedEvent& event) {}
-        virtual void mouseWheelEvent(const MouseScrolledEvent& event) {}
-        virtual void mousePressEvent(const MouseButtonPressedEvent& event) {}
-        virtual void mouseReleaseEvent(const MouseButtonReleasedEvent& event) {}
+        virtual void mouseMoveEvent(const Event& event) {}
+        virtual void mouseWheelEvent(const Event& event) {}
+        virtual void mousePressEvent(const Event& event) {}
+        virtual void mouseReleaseEvent(const Event& event) {}
 
-        virtual void keyPressEvent(const KeyPressEvent& event) {}
-        virtual void keyReleaseEvent(const KeyReleasedEvent& event) {}
+        virtual void keyPressEvent(const Event& event) {}
+        virtual void keyReleaseEvent(const Event& event) {}
 
-        virtual void windowCloseEvent(const WindowClosedEvent& event) {}
-        virtual void windowResizeEvent(const WindowResizedEvent& event) {}
+        virtual void windowCloseEvent(const Event& event) {}
+        virtual void windowResizeEvent(const Event& event) {}
 
         static float getWidth() { return _width; };
         static float getHeight() { return _height; };

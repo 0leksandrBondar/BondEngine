@@ -23,6 +23,7 @@
 #include "camera2d.h"
 
 #include "GLFW/glfw3.h"
+#include "event.h"
 #include "resourcemanager.h"
 
 #include <iostream>
@@ -37,15 +38,15 @@ namespace BondEngine
         _shaderProgram->setMatrix4("viewMat", glm::mat4(1.0f));
     }
 
-    void Camera2D::move(const KeyPressEvent& event)
+    void Camera2D::move(const Event& event)
     {
-        if (event._key == GLFW_KEY_W)
+        if (event.button(Key::Key_W))
             _position.y -= _speed;
-        if (event._key == GLFW_KEY_S)
+        if (event.button(Key::Key_S))
             _position.y += _speed;
-        if (event._key == GLFW_KEY_A)
+        if (event.button(Key::Key_A))
             _position.x += _speed;
-        if (event._key == GLFW_KEY_D)
+        if (event.button(Key::Key_D))
             _position.x -= _speed;
 
         _shaderProgram->setMatrix4("viewMat", getViewMatrix());

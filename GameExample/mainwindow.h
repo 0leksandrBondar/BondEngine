@@ -22,10 +22,11 @@ public:
 
     void startGameLoop() const;
 
-    void keyPressEvent(const BondEngine::KeyPressEvent& event) override;
+    void keyPressEvent(const BondEngine::Event& event) override;
 
-    void mouseMoveEvent(const BondEngine::MouseMovedEvent& event) override;
-    void mousePressEvent(const BondEngine::MouseButtonPressedEvent& event) override;
+    void mouseMoveEvent(const BondEngine::Event& event) override;
+    void mouseWheelEvent(const BondEngine::Event& event) override;
+    void mousePressEvent(const BondEngine::Event& event) override;
 
 private:
     std::shared_ptr<BondEngine::Camera2D> _camera;

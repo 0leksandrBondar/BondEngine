@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include "keyboardevents.h"
 #include "shaderprogram.h"
 #include "transformable.h"
 
@@ -30,13 +29,14 @@
 
 namespace BondEngine
 {
+    class Event;
 
     class Camera2D final : public Transformable
     {
     public:
         Camera2D();
 
-        void move(const KeyPressEvent& event);
+        void move(const Event& event);
 
         [[nodiscard]] glm::mat4 getViewMatrix() const;
         [[nodiscard]] glm::mat4 getProjectionMatrix(int width, int height) const;

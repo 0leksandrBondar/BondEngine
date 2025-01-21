@@ -29,13 +29,17 @@ namespace BondEngine
     {
     }
 
-    MouseScrolledEvent::MouseScrolledEvent(const int offset)
-        : Event(EventType::MouseScrolled), _offset(offset)
+    glm::vec2 MouseMovedEvent::getMousePosition() const { return glm::vec2(_mouseX, _mouseY); }
+
+    MouseScrolledEvent::MouseScrolledEvent(const float offsetX, const float offsetY)
+        : Event(EventType::MouseScrolled), _offsetX(offsetX), _offsetY(offsetY)
     {
     }
 
+    glm::vec2 MouseScrolledEvent::getZoomFactor() const { return glm::vec2(_offsetX, _offsetY); }
+
     MouseButtonPressedEvent::MouseButtonPressedEvent(const int button)
-        : Event(EventType::MouseButtonPressed), _button(button)
+        : Event(EventType::MouseButtonPressed, button)
     {
     }
 
@@ -45,7 +49,7 @@ namespace BondEngine
     }
 
     MouseButtonReleasedEvent::MouseButtonReleasedEvent(const int button)
-        : Event(EventType::MouseButtonReleased), _button(button)
+        : Event(EventType::MouseButtonReleased, button)
     {
     }
 

@@ -3,8 +3,12 @@
 namespace BondEngine
 {
 
-    KeyPressEvent::KeyPressEvent(const int key) : Event(EventType::KeyPressed), _key(key) {}
+    KeyPressEvent::KeyPressEvent(const int key) : Event(EventType::KeyPressed, key) {}
 
-    KeyReleasedEvent::KeyReleasedEvent(const int key) : Event(EventType::KeyReleased), _key(key) {}
+    bool KeyPressEvent::button(Key button) const { return _button == static_cast<int>(button); }
+
+    KeyReleasedEvent::KeyReleasedEvent(const int key) : Event(EventType::KeyReleased, key) {}
+
+    bool KeyReleasedEvent::button(Key button) const { return _button == static_cast<int>(button); }
 
 } // namespace BondEngine

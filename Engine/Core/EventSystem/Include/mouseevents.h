@@ -9,8 +9,7 @@ namespace BondEngine
     public:
         MouseMovedEvent(double x, double y);
 
-        [[nodiscard]] double getX() const { return _mouseX; }
-        [[nodiscard]] double getY() const { return _mouseY; }
+        glm::vec2 getMousePosition() const override;
 
     private:
         double _mouseX, _mouseY;
@@ -21,10 +20,12 @@ namespace BondEngine
     class MouseScrolledEvent final : public Event
     {
     public:
-        explicit MouseScrolledEvent(int offset);
+        explicit MouseScrolledEvent(float offsetX, float offsetY);
+
+        glm::vec2 getZoomFactor() const override;
 
     private:
-        int _offset;
+        int _offsetX, _offsetY;
     };
 
     /////////////////////////////////////////////////////////
@@ -34,10 +35,7 @@ namespace BondEngine
     public:
         explicit MouseButtonPressedEvent(int button);
 
-        [[nodiscard]] bool button(MouseButton button) const;
-
-    private:
-        int _button{};
+        bool button(MouseButton button) const override;
     };
 
     /////////////////////////////////////////////////////////
@@ -47,10 +45,7 @@ namespace BondEngine
     public:
         explicit MouseButtonReleasedEvent(int button);
 
-        [[nodiscard]] bool button(MouseButton button) const;
-
-    private:
-        int _button{};
+        bool button(MouseButton button) const override;
     };
 
 } // namespace BondEngine

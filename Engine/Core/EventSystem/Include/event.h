@@ -24,6 +24,10 @@
 
 // TODO: add brief for class Event
 
+#include "opengl.h"
+
+#include "glm/vec2.hpp"
+
 #include <string>
 
 namespace BondEngine
@@ -52,16 +56,30 @@ namespace BondEngine
         Middle,
     };
 
+    enum class Key : int
+    {
+        None = -1,
+        Key_W = GLFW_KEY_W,
+        Key_A = GLFW_KEY_A,
+        Key_S = GLFW_KEY_S,
+        Key_D = GLFW_KEY_D,
+    };
 
     class Event
     {
     public:
-        explicit Event(const EventType type) : _type(type) {}
+        explicit Event(const EventType type, int button = -1) : _type(type), _button(button) {}
         virtual ~Event() = default;
 
         [[nodiscard]] EventType getType() const { return _type; }
 
+        virtual bool button(Key button) const { return false; }
+        virtual bool button(MouseButton button) const { return false; }
+        virtual glm::vec2 getZoomFactor() const { return glm::vec2(0.0f, 0.0f); }
+        virtual glm::vec2 getMousePosition() const { return glm::vec2(0.0f, 0.0f); }
+
     protected:
         EventType _type{};
+        int _button{};
     };
 } // namespace BondEngine

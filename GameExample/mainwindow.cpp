@@ -5,6 +5,8 @@
 #include "sprite.h"
 #include "texture2D.h"
 
+#include <iostream>
+
 Window::Window(const int width, const int height, const char* title)
     : BondEngine::Window(width, height, title),
       _camera{ std::make_shared<BondEngine::Camera2D>() },
@@ -57,8 +59,12 @@ void Window::startGameLoop() const
     }
 }
 
-void Window::keyPressEvent(const BondEngine::KeyPressEvent& event) { _camera->move(event); }
+void Window::keyPressEvent(const BondEngine::Event& event) { _camera->move(event); }
 
-void Window::mouseMoveEvent(const BondEngine::MouseMovedEvent& event) {}
+void Window::mouseMoveEvent(const BondEngine::Event& event) {}
 
-void Window::mousePressEvent(const BondEngine::MouseButtonPressedEvent& event) {}
+void Window::mouseWheelEvent(const BondEngine::Event& event)
+{
+}
+
+void Window::mousePressEvent(const BondEngine::Event& event) {}
