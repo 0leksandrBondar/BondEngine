@@ -12,12 +12,16 @@ namespace BondEngine
         Transformable() = default;
         virtual ~Transformable() = default;
 
+        void setPosition(float x, float y);
+        void setPosition(const glm::vec2& position);
+
         void setRotation(float rotation);
+
         void setScale(float x, float y);
         void setScale(const glm::vec2& scale);
+
+        void move(float x, float y);
         void setSize(float width, float height);
-        void setPosition(const glm::vec2& position);
-        void setPosition(float x, float y);
 
         [[nodiscard]] const float getRotation() const;
         [[nodiscard]] const glm::vec2& getSize() const;

@@ -11,7 +11,7 @@ namespace BondEngine
 
     void Transformable::setPosition(float x, float y) { setPosition(glm::vec2(x, y)); }
 
-    void Transformable::setRotation(float rotation)
+    void Transformable::setRotation(const float rotation)
     {
         _rotation = rotation;
 
@@ -23,12 +23,18 @@ namespace BondEngine
         _needsUpdate = true;
     }
 
-    void Transformable::setScale(float x, float y) { setScale(glm::vec2(x, y)); }
+    void Transformable::setScale(const float x, const float y) { setScale(glm::vec2(x, y)); }
 
     void Transformable::setScale(const glm::vec2& scale)
     {
         _scale = scale;
         _scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(_size * _scale, 1.0f));
+        _needsUpdate = true;
+    }
+
+    void Transformable::move(const float x, const float y)
+    {
+        _position += glm::vec2(x, y);
         _needsUpdate = true;
     }
 

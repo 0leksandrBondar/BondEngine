@@ -36,9 +36,10 @@ namespace BondEngine
     public:
         Camera2D();
 
+        void zoom(float scaleFactorX, float scaleFactorY);
         void move(const Event& event);
 
-        [[nodiscard]] glm::mat4 getViewMatrix() const;
+        [[nodiscard]] glm::mat4 getViewMatrix();
         [[nodiscard]] glm::mat4 getProjectionMatrix(int width, int height) const;
 
     private:

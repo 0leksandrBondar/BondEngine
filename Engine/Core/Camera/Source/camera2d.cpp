@@ -25,6 +25,7 @@
 #include "GLFW/glfw3.h"
 #include "event.h"
 #include "resourcemanager.h"
+#include "window.h"
 
 #include <iostream>
 
@@ -38,23 +39,42 @@ namespace BondEngine
         _shaderProgram->setMatrix4("viewMat", glm::mat4(1.0f));
     }
 
-    void Camera2D::move(const Event& event)
+    void Camera2D::zoom(float scaleFactorX, float scaleFactorY)
     {
-        if (event.button(Key::Key_W))
-            _position.y -= _speed;
-        if (event.button(Key::Key_S))
-            _position.y += _speed;
-        if (event.button(Key::Key_A))
-            _position.x += _speed;
-        if (event.button(Key::Key_D))
-            _position.x -= _speed;
+        _scale *= glm::vec2(scaleFactorX, scaleFactorY);
+
+        if (_scale.x < 0.1f)
+            _scale.x = 0.1f;
+        if (_scale.y < 0.1f)
+            _scale.y = 0.1f;
 
         _shaderProgram->setMatrix4("viewMat", getViewMatrix());
     }
 
-    glm::mat4 Camera2D::getViewMatrix() const
+    void Camera2D::move(const Event& event)
     {
-        return glm::translate(glm::mat4(1.0f), glm::vec3(_position.x, _position.y, -3.0f));
+        if (event.button(Key::Key_W))
+            Transformable::move(0.f, -_speed);
+        if (event.button(Key::Key_S))
+            Transformable::move(0.f, _speed);
+        if (event.button(Key::Key_A))
+            Transformable::move(_speed, 0);
+        if (event.button(Key::Key_D))
+            Transformable::move(-_speed, 0);
+
+        _shaderProgram->setMatrix4("viewMat", getViewMatrix());
+    }
+
+    glm::mat4 Camera2D::getViewMatrix()
+    {
+        glm::vec2 screenCenter = { Window::getWidth() / 2.0f, Window::getHeight() / 2.0f };
+
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(screenCenter, 0.0f));
+        view = glm::scale(view, glm::vec3(_scale.y, _scale.y, 0.0f));
+        view = glm::translate(view, glm::vec3(-screenCenter + _position, -3.0f));
+
+        return view;
     }
 
     glm::mat4 Camera2D::getProjectionMatrix(int width, int height) const
