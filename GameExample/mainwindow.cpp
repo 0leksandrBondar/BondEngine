@@ -27,6 +27,8 @@ void Window::draw()
     _rotationSprite->draw();
 }
 
+void Window::update() { _camera->update(); }
+
 void Window::drawDebugMatrixView() const
 {
     using namespace std::chrono;
@@ -45,23 +47,21 @@ void Window::drawDebugMatrixView() const
     _scalingSprite->draw();
 }
 
-void Window::startGameLoop() const
+void Window::startGameLoop()
 {
     while (!windowShouldClose())
     {
         glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        drawDebugMatrixView();
+        update();
+        draw();
+        // drawDebugMatrixView();
 
         swapBuffers();
         pollEvents();
     }
 }
-
-void Window::keyPressEvent(const BondEngine::Event& event) { _camera->move(event); }
-
-void Window::mouseMoveEvent(const BondEngine::Event& event) {}
 
 void Window::mouseWheelEvent(const BondEngine::Event& event)
 {
@@ -70,5 +70,3 @@ void Window::mouseWheelEvent(const BondEngine::Event& event)
     const float scaleFactorY = 1.0f + zoomFactor.y * 0.1f;
     _camera->zoom(scaleFactorX, scaleFactorY);
 }
-
-void Window::mousePressEvent(const BondEngine::Event& event) {}

@@ -18,15 +18,12 @@ public:
     ~Window() override = default;
 
     void draw();
+    void update();
     void drawDebugMatrixView() const;
 
-    void startGameLoop() const;
+    void startGameLoop();
 
-    void keyPressEvent(const BondEngine::Event& event) override;
-
-    void mouseMoveEvent(const BondEngine::Event& event) override;
     void mouseWheelEvent(const BondEngine::Event& event) override;
-    void mousePressEvent(const BondEngine::Event& event) override;
 
 private:
     std::shared_ptr<BondEngine::Camera2D> _camera;

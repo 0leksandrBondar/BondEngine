@@ -22,12 +22,9 @@
 
 #include "camera2d.h"
 
-#include "GLFW/glfw3.h"
-#include "event.h"
+#include "eventhandler.h"
 #include "resourcemanager.h"
 #include "window.h"
-
-#include <iostream>
 
 namespace BondEngine
 {
@@ -51,17 +48,9 @@ namespace BondEngine
         _shaderProgram->setMatrix4("viewMat", getViewMatrix());
     }
 
-    void Camera2D::move(const Event& event)
+    void Camera2D::update()
     {
-        if (event.button(Key::Key_W))
-            Transformable::move(0.f, -_speed);
-        if (event.button(Key::Key_S))
-            Transformable::move(0.f, _speed);
-        if (event.button(Key::Key_A))
-            Transformable::move(_speed, 0);
-        if (event.button(Key::Key_D))
-            Transformable::move(-_speed, 0);
-
+        updatePosition();
         _shaderProgram->setMatrix4("viewMat", getViewMatrix());
     }
 
@@ -80,5 +69,17 @@ namespace BondEngine
     glm::mat4 Camera2D::getProjectionMatrix(int width, int height) const
     {
         return glm::ortho(0.0f, float(width), float(height), 0.0f, 0.1f, 100.0f);
+    }
+
+    void BondEngine::Camera2D::updatePosition()
+    {
+        if (EventHandler::isKeyPressed(BondEngine::Keyboard::W))
+            move(0.f, _speed);
+        if (EventHandler::isKeyPressed(BondEngine::Keyboard::S))
+            move(0.f, -_speed);
+        if (EventHandler::isKeyPressed(BondEngine::Keyboard::A))
+            move(_speed, 0);
+        if (EventHandler::isKeyPressed(BondEngine::Keyboard::D))
+            move(-_speed, 0);
     }
 } // namespace BondEngine

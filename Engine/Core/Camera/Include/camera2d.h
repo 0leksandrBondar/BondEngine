@@ -24,6 +24,7 @@
 
 #include "shaderprogram.h"
 #include "transformable.h"
+#include "updatable.h"
 
 #include <memory>
 
@@ -31,19 +32,23 @@ namespace BondEngine
 {
     class Event;
 
-    class Camera2D final : public Transformable
+    class Camera2D final : public Transformable, public Updatable
     {
     public:
         Camera2D();
 
         void zoom(float scaleFactorX, float scaleFactorY);
-        void move(const Event& event);
+
+        void update() override;
 
         [[nodiscard]] glm::mat4 getViewMatrix();
         [[nodiscard]] glm::mat4 getProjectionMatrix(int width, int height) const;
 
     private:
-        float _speed{ 50.0f };
+        void updatePosition();
+
+    private:
+        float _speed{ 0.2f };
         std::shared_ptr<ShaderProgram> _shaderProgram;
     };
 
