@@ -7,6 +7,7 @@ target_link_libraries(Core INTERFACE
 add_library(BondEngine::Core ALIAS Core)
 
 add_subdirectory(Utils)
+add_subdirectory(Tools)
 add_subdirectory(Window)
 add_subdirectory(Render)
 add_subdirectory(Camera)
