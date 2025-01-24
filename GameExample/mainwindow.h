@@ -18,11 +18,12 @@ public:
     ~Window() override = default;
 
     void draw();
-    void update();
     void drawDebugMatrixView() const;
 
-    void startGameLoop();
+    void updateFrame() override;
+    void renderFrame() override;
 
+    void keyPressEvent(const BondEngine::Event& event) override;
     void mouseWheelEvent(const BondEngine::Event& event) override;
 
 private:

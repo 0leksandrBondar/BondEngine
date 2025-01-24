@@ -22,7 +22,6 @@
 
 #include "camera2d.h"
 
-#include "eventhandler.h"
 #include "resourcemanager.h"
 #include "window.h"
 
@@ -48,11 +47,7 @@ namespace BondEngine
         _shaderProgram->setMatrix4("viewMat", getViewMatrix());
     }
 
-    void Camera2D::update()
-    {
-        updatePosition();
-        _shaderProgram->setMatrix4("viewMat", getViewMatrix());
-    }
+    void Camera2D::update() { _shaderProgram->setMatrix4("viewMat", getViewMatrix()); }
 
     glm::mat4 Camera2D::getViewMatrix()
     {
@@ -71,15 +66,4 @@ namespace BondEngine
         return glm::ortho(0.0f, float(width), float(height), 0.0f, 0.1f, 100.0f);
     }
 
-    void BondEngine::Camera2D::updatePosition()
-    {
-        if (EventHandler::isKeyPressed(BondEngine::Keyboard::W))
-            move(0.f, _speed);
-        if (EventHandler::isKeyPressed(BondEngine::Keyboard::S))
-            move(0.f, -_speed);
-        if (EventHandler::isKeyPressed(BondEngine::Keyboard::A))
-            move(_speed, 0);
-        if (EventHandler::isKeyPressed(BondEngine::Keyboard::D))
-            move(-_speed, 0);
-    }
 } // namespace BondEngine

@@ -43,7 +43,7 @@ namespace BondEngine
     {
     }
 
-    bool MouseButtonPressedEvent::button(MouseButton button) const
+    bool MouseButtonPressedEvent::button(Mouse button) const
     {
         return _button == static_cast<int>(button);
     }
@@ -53,7 +53,7 @@ namespace BondEngine
     {
     }
 
-    bool MouseButtonReleasedEvent::button(MouseButton button) const
+    bool MouseButtonReleasedEvent::button(Mouse button) const
     {
         return _button == static_cast<int>(button);
     }

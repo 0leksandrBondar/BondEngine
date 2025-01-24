@@ -39,8 +39,14 @@ namespace BondEngine
         void pollEvents() const;
         void swapBuffers() const;
 
-        [[nodiscard]] const GLFWwindow* getWindow() const;
+        void startGameLoop();
+
+        [[nodiscard]] Event getEvent() const;
         [[nodiscard]] int windowShouldClose() const;
+        [[nodiscard]] const GLFWwindow* getWindow() const;
+
+        virtual void updateFrame() {}
+        virtual void renderFrame() {}
 
         virtual void mouseMoveEvent(const Event& event) {}
         virtual void mouseWheelEvent(const Event& event) {}
@@ -58,14 +64,13 @@ namespace BondEngine
 
     private:
         void initCallbacks() const;
+        void handleKeyboardEvents();
 
         static void windowCloseCallback(GLFWwindow* window);
         static void mouseMovedCallback(GLFWwindow* window, double x, double y);
         static void mouseScrollCallback(GLFWwindow* window, double x, double y);
         static void windowResizeCallback(GLFWwindow* window, int width, int height);
         static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-        static void keyboardButtonCallback(GLFWwindow* window, int key, int scancode, int action,
-                                           int mods);
 
     private:
         std::string _title{};

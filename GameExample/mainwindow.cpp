@@ -27,8 +27,6 @@ void Window::draw()
     _rotationSprite->draw();
 }
 
-void Window::update() { _camera->update(); }
-
 void Window::drawDebugMatrixView() const
 {
     using namespace std::chrono;
@@ -47,20 +45,26 @@ void Window::drawDebugMatrixView() const
     _scalingSprite->draw();
 }
 
-void Window::startGameLoop()
+void Window::updateFrame() { _camera->update(); }
+
+void Window::renderFrame()
 {
-    while (!windowShouldClose())
-    {
-        glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        update();
-        draw();
-        // drawDebugMatrixView();
+    draw();
+}
 
-        swapBuffers();
-        pollEvents();
-    }
+void Window::keyPressEvent(const BondEngine::Event& event)
+{
+    if (event.button(BondEngine::Key::W))
+        _camera->move(0.f, 0.2);
+    if (event.button(BondEngine::Key::S))
+        _camera->move(0.f, -0.2);
+    if (event.button(BondEngine::Key::A))
+        _camera->move(0.2, 0);
+    if (event.button(BondEngine::Key::D))
+        _camera->move(-0.2, 0);
 }
 
 void Window::mouseWheelEvent(const BondEngine::Event& event)

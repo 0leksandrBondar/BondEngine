@@ -51,10 +51,7 @@ namespace BondEngine
         glfwSetWindowUserPointer(_window, this);
 
         initCallbacks();
-
-        if (!utils::initGLAD())
-            std::cerr << "Failed to initialize GLAD" << std::endl;
-
+        utils::initGLAD();
         utils::initDefaultResources();
     }
 
@@ -63,6 +60,20 @@ namespace BondEngine
     void Window::pollEvents() const { glfwPollEvents(); }
 
     void Window::swapBuffers() const { glfwSwapBuffers(_window); }
+
+    void BondEngine::Window::startGameLoop()
+    {
+        while (!windowShouldClose())
+        {
+            handleKeyboardEvents();
+
+            updateFrame();
+            renderFrame();
+
+            swapBuffers();
+            pollEvents();
+        }
+    }
 
     const GLFWwindow* Window::getWindow() const { return _window; }
 
@@ -74,13 +85,28 @@ namespace BondEngine
         glfwSetWindowSizeCallback(_window, windowResizeCallback);
         glfwSetWindowCloseCallback(_window, windowCloseCallback);
 
-        // keyboard events
-        glfwSetKeyCallback(_window, keyboardButtonCallback);
-
         // mouse events
         glfwSetCursorPosCallback(_window, mouseMovedCallback);
         glfwSetScrollCallback(_window, mouseScrollCallback);
         glfwSetMouseButtonCallback(_window, mouseButtonCallback);
+    }
+
+    void BondEngine::Window::handleKeyboardEvents()
+    {
+        for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key)
+        {
+            int state = glfwGetKey(_window, key);
+            if (state == GLFW_PRESS)
+            {
+                KeyPressEvent event(key);
+                keyPressEvent(event);
+            }
+            else if (state == GLFW_RELEASE)
+            {
+                KeyReleasedEvent event(key);
+                keyReleaseEvent(event);
+            }
+        }
     }
 
     void Window::windowCloseCallback(GLFWwindow* window)
@@ -100,7 +126,7 @@ namespace BondEngine
     void Window::mouseScrollCallback(GLFWwindow* window, double x, double y)
     {
         auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        MouseScrolledEvent event(x,y);
+        MouseScrolledEvent event(x, y);
         windowPtr->mouseWheelEvent(event);
     }
 
@@ -125,22 +151,6 @@ namespace BondEngine
         {
             MouseButtonReleasedEvent event(button);
             windowPtr->mouseReleaseEvent(event);
-        }
-    }
-
-    void Window::keyboardButtonCallback(GLFWwindow* window, const int key, int scancode,
-                                        const int action, int mods)
-    {
-        auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        if (action == GLFW_PRESS)
-        {
-            KeyPressEvent event(key);
-            windowPtr->keyPressEvent(event);
-        }
-        else if (action == GLFW_RELEASE)
-        {
-            KeyReleasedEvent event(key);
-            windowPtr->keyReleaseEvent(event);
         }
     }
 
