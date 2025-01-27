@@ -4,3 +4,5 @@ set(GLAD_SOURCES glad/include/glad/glad.h glad/src/glad.c)
 
 add_library(glad STATIC ${GLAD_SOURCES})
 target_include_directories(glad PUBLIC glad/include)
+
+add_subdirectory(freetype-2.13.3)
