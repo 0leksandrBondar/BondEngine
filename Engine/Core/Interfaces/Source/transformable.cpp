@@ -35,6 +35,7 @@ namespace BondEngine
     void Transformable::move(const float x, const float y)
     {
         _position += glm::vec2(x, y);
+        _translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
         _needsUpdate = true;
     }
 

@@ -44,26 +44,9 @@ namespace BondEngine
         if (_scale.y < 0.1f)
             _scale.y = 0.1f;
 
-        _shaderProgram->setMatrix4("viewMat", getViewMatrix());
+        _shaderProgram->setMatrix4("viewMat", getTransformMatrix());
     }
 
-    void Camera2D::update() { _shaderProgram->setMatrix4("viewMat", getViewMatrix()); }
-
-    glm::mat4 Camera2D::getViewMatrix()
-    {
-        glm::vec2 screenCenter = { Window::getWidth() / 2.0f, Window::getHeight() / 2.0f };
-
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(screenCenter, 0.0f));
-        view = glm::scale(view, glm::vec3(_scale.y, _scale.y, 0.0f));
-        view = glm::translate(view, glm::vec3(-screenCenter + _position, -3.0f));
-
-        return view;
-    }
-
-    glm::mat4 Camera2D::getProjectionMatrix(int width, int height) const
-    {
-        return glm::ortho(0.0f, float(width), float(height), 0.0f, 0.1f, 100.0f);
-    }
+    void Camera2D::update() { _shaderProgram->setMatrix4("viewMat", getTransformMatrix()); }
 
 } // namespace BondEngine

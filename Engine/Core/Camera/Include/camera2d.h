@@ -41,9 +41,6 @@ namespace BondEngine
 
         void update() override;
 
-        [[nodiscard]] glm::mat4 getViewMatrix();
-        [[nodiscard]] glm::mat4 getProjectionMatrix(int width, int height) const;
-
     private:
         float _speed{ 0.2f };
         std::shared_ptr<ShaderProgram> _shaderProgram;
