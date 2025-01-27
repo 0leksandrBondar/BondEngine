@@ -26,8 +26,7 @@
 #include "keyboardevents.h"
 #include "utils.h"
 #include "windowevents.h"
-
-#include <iostream>
+#include "timer.h"
 
 namespace BondEngine
 {
@@ -54,11 +53,13 @@ namespace BondEngine
 
     void Window::startGameLoop()
     {
+        Timer timer;
         while (!glfwWindowShouldClose(_window))
         {
+            timer.update();
             handleKeyboardEvents();
 
-            updateFrame();
+            updateFrame(timer.getDeltaTime());
             renderFrame();
 
             glfwSwapBuffers(_window);

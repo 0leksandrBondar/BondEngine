@@ -17,11 +17,10 @@ public:
 
     ~Window() override = default;
 
-    void draw();
-    void drawDebugMatrixView() const;
+    void draw() const;
 
-    void updateFrame() override;
     void renderFrame() override;
+    void updateFrame(const float deltaTime) override;
 
     void keyPressEvent(const BondEngine::Event& event) override;
     void mouseWheelEvent(const BondEngine::Event& event) override;

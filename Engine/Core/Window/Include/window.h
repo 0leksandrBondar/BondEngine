@@ -40,8 +40,8 @@ namespace BondEngine
 
         [[nodiscard]] const GLFWwindow* getWindow() const;
 
-        virtual void updateFrame() {}
         virtual void renderFrame() {}
+        virtual void updateFrame(const float deltaTime) {}
 
         virtual void mouseMoveEvent(const Event& event) {}
         virtual void mouseWheelEvent(const Event& event) {}

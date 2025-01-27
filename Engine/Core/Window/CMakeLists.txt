@@ -16,5 +16,6 @@ target_link_libraries(
         Window PUBLIC
         EventSystem
         Utils
+        Tools
 )
  

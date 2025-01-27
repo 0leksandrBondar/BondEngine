@@ -5,8 +5,6 @@
 #include "sprite.h"
 #include "texture2D.h"
 
-#include <iostream>
-
 Window::Window(const int width, const int height, const char* title)
     : BondEngine::Window(width, height, title),
       _camera{ std::make_shared<BondEngine::Camera2D>() },
@@ -21,31 +19,32 @@ Window::Window(const int width, const int height, const char* title)
                                 _rotationSprite->getPosition().y);
 }
 
-void Window::draw()
+void Window::draw() const
 {
     _scalingSprite->draw();
     _rotationSprite->draw();
 }
 
-void Window::drawDebugMatrixView() const
+void Window::updateFrame(const float deltaTime)
 {
-    using namespace std::chrono;
+    constexpr float rotationSpeed = 120.0f;
+    constexpr float scalingFrequency = 2.0f;
+    constexpr float scalingAmplitude = 0.5f;
+    constexpr float baseScale = 1.0f;
 
-    static auto startTime = high_resolution_clock::now();
-    const auto currentTime = high_resolution_clock::now();
-    const float elapsedTime = duration<float>(currentTime - startTime).count();
+    static float currentRotation = 0.0f;
+    currentRotation += rotationSpeed * deltaTime;
+    currentRotation = fmod(currentRotation, 360.0f);
+    _rotationSprite->setRotation(currentRotation);
 
-    const float rotation = fmod(elapsedTime * 360.0f / 3.0f, 360.0f);
-    _rotationSprite->setRotation(rotation);
-
-    const float scaleFactor = 1.0f + 0.5f * (sin(elapsedTime * glm::pi<float>() / 1.5f));
+    static float scalingTime = 0.0f;
+    scalingTime += deltaTime;
+    const float scaleFactor
+        = baseScale + scalingAmplitude * sin(scalingTime * scalingFrequency * glm::pi<float>());
     _scalingSprite->setScale(scaleFactor, scaleFactor);
 
-    _rotationSprite->draw();
-    _scalingSprite->draw();
+    _camera->update();
 }
-
-void Window::updateFrame() { _camera->update(); }
 
 void Window::renderFrame()
 {
