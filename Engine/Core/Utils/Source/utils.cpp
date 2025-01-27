@@ -50,6 +50,18 @@ namespace BondEngine::utils
                                                           "assets/Shaders/fragmentSprite.frag");
     }
 
+    GLFWwindow* createWindow(const int width, const int height, const char* title)
+    {
+        GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
+        if (!window)
+        {
+            std::cerr << "Failed to create GLFW window" << std::endl;
+            glfwTerminate();
+            return nullptr;
+        }
+        return window;
+    }
+
     std::string getShaderProgramSourceCode(const std::filesystem::path& shaderProgramPath)
     {
         std::ifstream file(shaderProgramPath);

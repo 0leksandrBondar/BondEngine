@@ -29,14 +29,14 @@ namespace BondEngine
     {
     }
 
-    glm::vec2 MouseMovedEvent::getMousePosition() const { return glm::vec2(_mouseX, _mouseY); }
+    glm::vec2 MouseMovedEvent::getMousePosition() const { return { _mouseX, _mouseY }; }
 
-    MouseScrolledEvent::MouseScrolledEvent(const float offsetX, const float offsetY)
+    MouseScrolledEvent::MouseScrolledEvent(const double offsetX, const double offsetY)
         : Event(EventType::MouseScrolled), _offsetX(offsetX), _offsetY(offsetY)
     {
     }
 
-    glm::vec2 MouseScrolledEvent::getZoomFactor() const { return glm::vec2(_offsetX, _offsetY); }
+    glm::vec2 MouseScrolledEvent::getZoomFactor() const { return { _offsetX, _offsetY }; }
 
     MouseButtonPressedEvent::MouseButtonPressedEvent(const int button)
         : Event(EventType::MouseButtonPressed, button)

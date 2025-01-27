@@ -36,13 +36,8 @@ namespace BondEngine
         Window(int width, int height, const char* title);
         virtual ~Window();
 
-        void pollEvents() const;
-        void swapBuffers() const;
-
         void startGameLoop();
 
-        [[nodiscard]] Event getEvent() const;
-        [[nodiscard]] int windowShouldClose() const;
         [[nodiscard]] const GLFWwindow* getWindow() const;
 
         virtual void updateFrame() {}
@@ -77,6 +72,6 @@ namespace BondEngine
         GLFWwindow* _window{ nullptr };
 
     private:
-        static float _width, _height;
+        static int _width, _height;
     };
 } // namespace BondEngine

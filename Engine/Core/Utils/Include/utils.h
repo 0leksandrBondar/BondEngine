@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "opengl.h"
 #include <filesystem>
 
 namespace BondEngine::utils
@@ -29,6 +30,7 @@ namespace BondEngine::utils
     int initGLAD();
     void initGLFW();
     void initDefaultResources();
+    GLFWwindow* createWindow(const int width, const int height, const char* title);
 
     std::string getShaderProgramSourceCode(const std::filesystem::path& shaderProgramPath);
 } // namespace BondEngine::utils
