@@ -37,8 +37,6 @@ namespace BondEngine
     public:
         Camera2D();
 
-        void zoom(float scaleFactorX, float scaleFactorY);
-
         void update() override;
 
     private:

@@ -69,7 +69,11 @@ void Window::keyPressEvent(const BondEngine::Event& event)
 void Window::mouseWheelEvent(const BondEngine::Event& event)
 {
     const auto zoomFactor = event.getZoomFactor();
-    const float scaleFactorX = 1.0f + zoomFactor.x * 0.1f;
-    const float scaleFactorY = 1.0f + zoomFactor.y * 0.1f;
-    _camera->zoom(scaleFactorX, scaleFactorY);
+    float scaleFactor = 1.0f + zoomFactor.y * 0.1f; // Use only y-component for vertical scrolling
+    glm::vec2 screenCenter = { Window::getWidth() / 2.0f, Window::getHeight() / 2.0f };
+
+    if (scaleFactor < 0.1f)
+        scaleFactor = 0.1f;
+
+    _camera->zoom(scaleFactor,screenCenter);
 }

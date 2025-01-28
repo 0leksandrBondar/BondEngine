@@ -46,6 +46,19 @@ namespace BondEngine
         _needsUpdate = true;
     }
 
+    void Transformable::zoom(float scaleFactor, glm::vec2 targetPos)
+    {
+        _scale *= scaleFactor;
+
+        const glm::vec2 deltaPosition = (1.0f - scaleFactor) * (targetPos - _position);
+        _position += deltaPosition;
+
+        _translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
+        _scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(_scale.x, _scale.y, 1.0f));
+        _needsUpdate = true;
+    }
+
+
     const float Transformable::getRotation() const { return _rotation; }
 
     const glm::vec2& Transformable::getSize() const { return _size; }

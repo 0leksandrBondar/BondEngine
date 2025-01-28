@@ -35,17 +35,6 @@ namespace BondEngine
         _shaderProgram->setMatrix4("viewMat", glm::mat4(1.0f));
     }
 
-    void Camera2D::zoom(float scaleFactorX, float scaleFactorY)
-    {
-        _scale *= glm::vec2(scaleFactorX, scaleFactorY);
-
-        if (_scale.x < 0.1f)
-            _scale.x = 0.1f;
-        if (_scale.y < 0.1f)
-            _scale.y = 0.1f;
-
-        _shaderProgram->setMatrix4("viewMat", getTransformMatrix());
-    }
 
     void Camera2D::update() { _shaderProgram->setMatrix4("viewMat", getTransformMatrix()); }
 

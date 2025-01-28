@@ -1,8 +1,8 @@
 #pragma once
 
+#include "glm/gtc/matrix_transform.hpp"
 #include "glm/mat4x4.hpp"
 #include "glm/vec2.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 
 namespace BondEngine
 {
@@ -22,6 +22,8 @@ namespace BondEngine
 
         void move(float x, float y);
         void setSize(float width, float height);
+
+        void zoom(float scaleFactor, glm::vec2 targetPos);
 
         [[nodiscard]] const float getRotation() const;
         [[nodiscard]] const glm::vec2& getSize() const;
