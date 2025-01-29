@@ -40,7 +40,7 @@ namespace BondEngine
         void update() override;
 
     private:
-        float _speed{ 0.2f };
+        float _speed{ 20.f };
         std::shared_ptr<ShaderProgram> _shaderProgram;
     };
 

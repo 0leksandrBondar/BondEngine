@@ -30,34 +30,38 @@
 
 namespace BondEngine
 {
-    class Texture2D : public NonCopyable
+    class Texture2D final : public NonCopyable
     {
     public:
         Texture2D() = default;
 
-        Texture2D(const GLuint width, const GLuint height, const unsigned char* data,
-                  unsigned int channels = 4, const GLenum filter = GL_LINEAR,
-                  const GLenum wrapMode = GL_CLAMP_TO_EDGE);
         explicit Texture2D(const std::filesystem::path& path);
+        Texture2D(GLuint width, GLuint height, const unsigned char* data, size_t channels = 4,
+                  GLenum filter = GL_LINEAR, GLenum wrapMode = GL_CLAMP_TO_EDGE);
+        ~Texture2D() override;
 
         Texture2D(Texture2D&& other) noexcept;
+        Texture2D& operator=(Texture2D&& other) noexcept;
 
-        ~Texture2D();
-
-        Texture2D& operator=(const Texture2D&& other) noexcept;
+        void setSmooth(bool smooth);
 
         void bind() const;
         void unbind() const;
 
+        [[nodiscard]] bool isSmooth() const;
+
     private:
         void loadTexture(const std::filesystem::path& path);
-        void intialize(const GLuint width, const GLuint height, const unsigned char* data,
-                       unsigned int channels = 4, const GLenum filter = GL_LINEAR,
-                       const GLenum wrapMode = GL_CLAMP_TO_EDGE);
+        void initialize(const unsigned char* data, const size_t channels = 4,
+                        const GLenum filter = GL_LINEAR, const GLenum wrapMode = GL_CLAMP_TO_EDGE);
 
     private:
         GLenum _mode;
         GLuint _id{ 0 };
+        GLenum _format{ GL_RGB };
+
+        bool _smooth{ false };
+
         int channels{ 0 };
         int _width{ 0 }, _height{ 0 };
     };

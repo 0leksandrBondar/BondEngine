@@ -68,6 +68,8 @@ namespace BondEngine
         _vao.unbind();
     }
 
+    std::shared_ptr<Texture2D> Sprite::getTexture() const { return _texture; }
+
     void Sprite::setupBuffers()
     {
         _vbo.init(vertexCoords, sizeof(vertexCoords));

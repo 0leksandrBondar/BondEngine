@@ -42,6 +42,8 @@ namespace BondEngine
 
         void draw() override;
 
+        std::shared_ptr<Texture2D> getTexture() const;
+
     private:
         void setupBuffers();
 
