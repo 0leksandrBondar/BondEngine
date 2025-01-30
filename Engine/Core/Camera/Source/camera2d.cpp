@@ -33,6 +33,7 @@ namespace BondEngine
         _shaderProgram = ResourceManager::getInstance()->getShaderProgram("DefaultShaderProgram");
         _shaderProgram->use();
         _shaderProgram->setMatrix4("viewMat", glm::mat4(1.0f));
+        ignoreSize(true);
     }
 
     void Camera2D::update()

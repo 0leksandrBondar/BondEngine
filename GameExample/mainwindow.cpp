@@ -64,6 +64,9 @@ void Window::keyPressEvent(const BondEngine::Event& event)
         _camera->move(0.2, 0);
     if (event.button(BondEngine::Key::D))
         _camera->move(-0.2, 0);
+
+    if (event.button(BondEngine::Key::Q))
+        _rotationSprite->move(2.f, 0.f);
 }
 
 void Window::mouseWheelEvent(const BondEngine::Event& event)

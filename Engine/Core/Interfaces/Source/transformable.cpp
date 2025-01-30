@@ -8,15 +8,11 @@ namespace BondEngine
         _needsUpdate = true;
     }
 
-    void Transformable::setPosition(float x, float y) { setPosition(glm::vec2(x, y)); }
-
     void Transformable::setRotation(const float rotation)
     {
         _rotation = rotation;
         _needsUpdate = true;
     }
-
-    void Transformable::setScale(const float x, const float y) { setScale(glm::vec2(x, y)); }
 
     void Transformable::setScale(const glm::vec2& scale)
     {
@@ -46,15 +42,6 @@ namespace BondEngine
         _needsUpdate = true;
     }
 
-
-    const float Transformable::getRotation() const { return _rotation; }
-
-    const glm::vec2& Transformable::getSize() const { return _size; }
-
-    const glm::vec2& Transformable::getScale() const { return _scale; }
-
-    const glm::vec2& Transformable::getPosition() const { return _position; }
-
     const glm::mat4& Transformable::getTransformMatrix()
     {
         if (_needsUpdate)
@@ -70,7 +57,9 @@ namespace BondEngine
               * glm::rotate(glm::mat4(1.0f), glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f))
               * glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.0f));
 
-        auto scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(_size.x, _size.y, 1.0f));
+        glm::vec2 size = _isIgnoreSize ? glm::vec2(1.f) : _size;
+
+        auto scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
         scaleMatrix = glm::scale(scaleMatrix, glm::vec3(_scale.x, _scale.y, 1.0f));
         const auto translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
 

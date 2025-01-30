@@ -12,12 +12,12 @@ namespace BondEngine
         Transformable() = default;
         virtual ~Transformable() = default;
 
-        void setPosition(float x, float y);
+        void setPosition(float x, float y) { setPosition(glm::vec3(x, y, 0.0f)); }
         void setPosition(const glm::vec2& position);
 
         void setRotation(float rotation);
 
-        void setScale(float x, float y);
+        void setScale(float x, float y) { setScale(glm::vec2(x, y)); }
         void setScale(const glm::vec2& scale);
 
         void move(float x, float y);
@@ -26,13 +26,18 @@ namespace BondEngine
 
         void zoom(float scaleFactor, glm::vec2 targetPos);
 
-        [[nodiscard]] const float getRotation() const;
-        [[nodiscard]] const glm::vec2& getSize() const;
-        [[nodiscard]] const glm::vec2& getScale() const;
-        [[nodiscard]] const glm::vec2& getPosition() const;
+        [[nodiscard]] glm::vec2 getSize() const { return _size; }
+        [[nodiscard]] glm::vec2 getScale() const { return _scale; }
+        [[nodiscard]] float getRotation() const { return _rotation; }
+        [[nodiscard]] glm::vec2 getPosition() const { return _position; }
         [[nodiscard]] const glm::mat4& getTransformMatrix();
 
+        void ignoreSize(bool value) noexcept { _isIgnoreSize = value; }
+        [[nodiscard]] bool isIgnoreSize() const noexcept { return _isIgnoreSize; }
+
     protected:
+        bool _isIgnoreSize = false;
+
         float _rotation{};
         glm::vec2 _size{};
         glm::vec2 _scale{ 1.f };
