@@ -21,7 +21,8 @@ namespace BondEngine
         void setScale(const glm::vec2& scale);
 
         void move(float x, float y);
-        void setSize(float width, float height);
+
+        [[deprecated]] void setSize(float width, float height);
 
         void zoom(float scaleFactor, glm::vec2 targetPos);
 
@@ -38,10 +39,7 @@ namespace BondEngine
         glm::vec2 _position{};
 
     private:
-        glm::mat4 _translationMatrix{ 1.0f };
-        glm::mat4 _rotationMatrix{ 1.0f };
-        glm::mat4 _scaleMatrix{ 1.0f };
-        glm::mat4 _transformMatrix{ 1.0f };
+        glm::mat4 _modelMatrix{ 1.0f };
         bool _needsUpdate{ true };
 
         void updateTransform();

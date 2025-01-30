@@ -5,7 +5,6 @@ namespace BondEngine
     void Transformable::setPosition(const glm::vec2& position)
     {
         _position = position;
-        _translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
         _needsUpdate = true;
     }
 
@@ -14,12 +13,6 @@ namespace BondEngine
     void Transformable::setRotation(const float rotation)
     {
         _rotation = rotation;
-
-        _rotationMatrix
-            = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.0f))
-              * glm::rotate(glm::mat4(1.0f), glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f))
-              * glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.0f));
-
         _needsUpdate = true;
     }
 
@@ -28,21 +21,18 @@ namespace BondEngine
     void Transformable::setScale(const glm::vec2& scale)
     {
         _scale = scale;
-        _scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(_size * _scale, 1.0f));
         _needsUpdate = true;
     }
 
     void Transformable::move(const float x, const float y)
     {
         _position += glm::vec2(x, y);
-        _translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
         _needsUpdate = true;
     }
 
     void Transformable::setSize(float width, float height)
     {
         _size = { width, height };
-        _scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(_size * _scale, 1.0f));
         _needsUpdate = true;
     }
 
@@ -53,8 +43,6 @@ namespace BondEngine
         const glm::vec2 deltaPosition = (1.0f - scaleFactor) * (targetPos - _position);
         _position += deltaPosition;
 
-        _translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
-        _scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(_scale.x, _scale.y, 1.0f));
         _needsUpdate = true;
     }
 
@@ -70,15 +58,23 @@ namespace BondEngine
     const glm::mat4& Transformable::getTransformMatrix()
     {
         if (_needsUpdate)
-        {
             updateTransform();
-        }
-        return _transformMatrix;
+
+        return _modelMatrix;
     }
 
     void Transformable::updateTransform()
     {
-        _transformMatrix = _translationMatrix * _rotationMatrix * _scaleMatrix;
+        const auto rotationMatrix
+            = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.0f))
+              * glm::rotate(glm::mat4(1.0f), glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f))
+              * glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.0f));
+
+        auto scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(_size.x, _size.y, 1.0f));
+        scaleMatrix = glm::scale(scaleMatrix, glm::vec3(_scale.x, _scale.y, 1.0f));
+        const auto translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
+
+        _modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
         _needsUpdate = false;
     }
 } // namespace BondEngine

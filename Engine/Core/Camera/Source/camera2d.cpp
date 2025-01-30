@@ -35,7 +35,10 @@ namespace BondEngine
         _shaderProgram->setMatrix4("viewMat", glm::mat4(1.0f));
     }
 
-
-    void Camera2D::update() { _shaderProgram->setMatrix4("viewMat", getTransformMatrix()); }
+    void Camera2D::update()
+    {
+        _shaderProgram->use();
+        _shaderProgram->setMatrix4("viewMat", getTransformMatrix());
+    }
 
 } // namespace BondEngine
