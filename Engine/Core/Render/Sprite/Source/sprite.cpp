@@ -34,13 +34,16 @@
 
 namespace BondEngine
 {
-    constexpr GLfloat vertexCoords[] = {
-        0.0f, 0.f, 0.0f, 1.f, 1.0f, 1.f, 1.0f, 0.f,
+    struct Vertex
+    {
+        glm::vec2 position;
+        glm::vec2 texCoords;
     };
 
-    constexpr GLfloat textureCoords[] = {
-        0.0f, 0.f, 0.0f, 1.f, 1.0f, 1.f, 1.0f, 0.f,
-    };
+    std::vector<Vertex> vertices = { { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
+                                     { { 1.0f, 0.0f }, { 1.0f, 0.0f } },
+                                     { { 1.0f, 1.0f }, { 1.0f, 1.0f } },
+                                     { { 0.0f, 1.0f }, { 0.0f, 1.0f } } };
 
     const GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
 
@@ -68,21 +71,17 @@ namespace BondEngine
         _vao.unbind();
     }
 
-    std::shared_ptr<Texture2D> Sprite::getTexture() const { return _texture; }
-
     void Sprite::setupBuffers()
     {
-        _vbo.init(vertexCoords, sizeof(vertexCoords));
-        VertexBufferLayout vertexCoordsLayout;
-        vertexCoordsLayout.addElementLayoutFloat(2, false);
-        _vao.addBuffer(_vbo, vertexCoordsLayout);
+        _vbo.init(vertices.data(), vertices.size() * sizeof(Vertex));
 
-        _tvbo.init(textureCoords, sizeof(textureCoords));
-        VertexBufferLayout textureCoordsLayout;
-        textureCoordsLayout.addElementLayoutFloat(2, false);
-        _vao.addBuffer(_tvbo, textureCoordsLayout);
+        VertexBufferLayout layout;
+        layout.addElementLayoutFloat(2, false);
+        layout.addElementLayoutFloat(2, false);
+        _vao.addBuffer(_vbo, layout);
 
         _ibo.init(indices, sizeof(indices));
+
         _vao.unbind();
         _ibo.unbind();
     }

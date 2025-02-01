@@ -49,8 +49,6 @@ namespace BondEngine
         utils::initDefaultResources();
     }
 
-    Window::~Window() { glfwTerminate(); }
-
     void Window::startGameLoop()
     {
         Timer timer;

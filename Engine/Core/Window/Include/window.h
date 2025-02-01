@@ -34,7 +34,7 @@ namespace BondEngine
     {
     public:
         Window(int width, int height, const char* title);
-        virtual ~Window();
+        virtual ~Window() { glfwTerminate(); }
 
         void startGameLoop();
 
