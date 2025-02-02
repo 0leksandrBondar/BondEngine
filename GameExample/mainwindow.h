@@ -1,5 +1,6 @@
 #pragma once
 
+#include "renderer.h"
 #include "window.h"
 
 #include <memory>
@@ -27,6 +28,7 @@ public:
 
 private:
     std::shared_ptr<BondEngine::Camera2D> _camera;
+    std::shared_ptr<BondEngine::Renderer> _renderer;
     std::shared_ptr<BondEngine::Sprite> _scalingSprite;
     std::shared_ptr<BondEngine::Sprite> _rotationSprite;
 };

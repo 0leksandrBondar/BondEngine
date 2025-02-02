@@ -22,21 +22,30 @@
 
 #pragma once
 
-#include "drawable.h"
-#include "noncopyable.h"
+#include "Drawable.h"
+#include "camera2d.h"
+#include "window.h"
 
 namespace BondEngine
 {
-    class Texture2D;
 
-    class Sprite final : public Drawable, public NonCopyable
+    class Renderer
     {
     public:
-        Sprite() = default;
+        explicit Renderer(Camera2D* camera) : _camera(camera) {}
 
-        explicit Sprite(const std::shared_ptr<Texture2D>& texture);
+        void render(Drawable* item);
+
+        [[nodiscard]] static std::string getGPUBrand();
 
     private:
-        void setupBuffers();
+        void updateMatrix(Drawable* item) const;
+
+    private:
+        Camera2D* _camera{ nullptr };
+        ShaderProgram* _shaderProgram{ nullptr };
+        const glm::mat4 _projectionMatrix
+            = glm::ortho(0.f, Window::getWidth(), Window::getHeight(), 0.f, -100.f, 100.f);
     };
+
 } // namespace BondEngine

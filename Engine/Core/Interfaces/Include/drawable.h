@@ -22,24 +22,32 @@
 
 #pragma once
 
-#include "ibo.h"
+#include "EBO.h"
+#include "Texture2D.h"
+#include "transformable.h"
 #include "vao.h"
 #include "vbo.h"
 
 #include <memory>
+#include <string>
 
 namespace BondEngine
 {
 
     class ShaderProgram;
 
-    class Drawable
+    class Drawable : public Transformable
     {
     public:
         Drawable();
-        virtual ~Drawable() = default;
 
-        virtual void draw() = 0;
+        virtual void draw() {};
+
+        [[nodiscard]] VAO& getVAO() { return _vao; }
+        [[nodiscard]] std::string getShaderName() const { return _shaderName; }
+        [[nodiscard]] std::shared_ptr<Texture2D> getTexture() const { return _texture; }
+
+        [[nodiscard]] unsigned int getVertexCount() const { return _vertexCount; }
 
         void setShaderProgram(const std::shared_ptr<ShaderProgram>& shaderProgram);
 
@@ -48,10 +56,13 @@ namespace BondEngine
 
     protected:
         VAO _vao{};
-        IBO _ibo{};
+        EBO _ebo{};
         VBO _vbo{};
-        VBO _tvbo{};
 
+        unsigned int _vertexCount{ 0 };
+
+        std::string _shaderName{};
+        std::shared_ptr<Texture2D> _texture;
         std::shared_ptr<ShaderProgram> _shaderProgram;
     };
 } // namespace BondEngine

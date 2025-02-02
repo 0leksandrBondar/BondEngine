@@ -12,6 +12,7 @@ target_link_libraries(GameExample PRIVATE
         Window
         Render
         Camera
+        Renderer
 )
 
 # TODO: move it to engine lib

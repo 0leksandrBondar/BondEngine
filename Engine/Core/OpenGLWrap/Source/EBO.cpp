@@ -20,23 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include "EBO.h"
 
-#include "drawable.h"
-#include "noncopyable.h"
+#include <algorithm>
 
 namespace BondEngine
 {
-    class Texture2D;
+    EBO::EBO(EBO&& other) noexcept { *this = std::move(other); }
 
-    class Sprite final : public Drawable, public NonCopyable
+    EBO& EBO::operator=(EBO&& other) noexcept
     {
-    public:
-        Sprite() = default;
+        _id = other._id;
+        other._id = 0;
+        return *this;
+    }
 
-        explicit Sprite(const std::shared_ptr<Texture2D>& texture);
+    EBO::~EBO() { glDeleteBuffers(1, &_id); }
 
-    private:
-        void setupBuffers();
-    };
+    void EBO::init(const void* vertices, unsigned int size)
+    {
+        glGenBuffers(1, &_id);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+    }
+
+    void EBO::bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id); }
+
+    void EBO::unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
+
 } // namespace BondEngine

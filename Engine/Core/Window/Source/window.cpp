@@ -24,9 +24,9 @@
 
 #include "MouseEvents.h"
 #include "keyboardevents.h"
+#include "timer.h"
 #include "utils.h"
 #include "windowevents.h"
-#include "timer.h"
 
 namespace BondEngine
 {
@@ -38,7 +38,6 @@ namespace BondEngine
         _width = width;
         _height = height;
 
-        utils::initGLFW();
         _window = utils::createWindow(width, height, title);
 
         glfwMakeContextCurrent(_window);

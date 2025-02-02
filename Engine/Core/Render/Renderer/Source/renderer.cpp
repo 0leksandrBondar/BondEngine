@@ -20,23 +20,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#include "renderer.h"
 
-#include "drawable.h"
-#include "noncopyable.h"
+#include "resourcemanager.h"
+#include "shaderprogram.h"
 
 namespace BondEngine
 {
-    class Texture2D;
 
-    class Sprite final : public Drawable, public NonCopyable
+    void Renderer::render(Drawable* item)
     {
-    public:
-        Sprite() = default;
+        _shaderProgram
+            = ResourceManager::getInstance()->getShaderProgram(item->getShaderName()).get();
+        _shaderProgram->use();
 
-        explicit Sprite(const std::shared_ptr<Texture2D>& texture);
+        updateMatrix(item);
 
-    private:
-        void setupBuffers();
-    };
+        item->getVAO().bind();
+
+        if (item->getTexture() != nullptr)
+            item->getTexture()->bind();
+
+        glDrawElements(GL_TRIANGLES, item->getVertexCount(), GL_UNSIGNED_INT, nullptr);
+
+        if (item->getTexture() != nullptr)
+            item->getTexture()->unbind();
+
+        item->getVAO().unbind();
+    }
+
+    std::string Renderer::getGPUBrand()
+    {
+        return reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+    }
+
+    void Renderer::updateMatrix(Drawable* item) const
+    {
+        _shaderProgram->setMatrix4("projectionMat", _projectionMatrix);
+        _shaderProgram->setMatrix4("modelMat", item->getTransformMatrix());
+        _shaderProgram->setMatrix4("viewMat", _camera->getTransformMatrix());
+    }
+
 } // namespace BondEngine

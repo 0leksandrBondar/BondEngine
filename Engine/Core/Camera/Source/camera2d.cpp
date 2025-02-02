@@ -30,16 +30,16 @@ namespace BondEngine
 
     Camera2D::Camera2D()
     {
-        _shaderProgram = ResourceManager::getInstance()->getShaderProgram("DefaultShaderProgram");
-        _shaderProgram->use();
-        _shaderProgram->setMatrix4("viewMat", glm::mat4(1.0f));
+        //_shaderProgram = ResourceManager::getInstance()->getShaderProgram("DefaultShaderProgram");
+        //_shaderProgram->use();
+        //_shaderProgram->setMatrix4("viewMat", glm::mat4(1.0f));
         ignoreSize(true);
     }
 
     void Camera2D::update()
     {
-        _shaderProgram->use();
-        _shaderProgram->setMatrix4("viewMat", getTransformMatrix());
+        //_shaderProgram->use();
+        // _shaderProgram->setMatrix4("viewMat", getTransformMatrix());
     }
 
 } // namespace BondEngine

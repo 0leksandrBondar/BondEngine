@@ -20,32 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "ibo.h"
+#pragma once
 
-#include <algorithm>
+#include "glad/glad.h"
+#include "noncopyable.h"
 
 namespace BondEngine
 {
-    IBO::IBO(IBO&& other) noexcept { *this = std::move(other); }
-
-    IBO& IBO::operator=(IBO&& other) noexcept
+    class EBO : public NonCopyable
     {
-        _id = other._id;
-        other._id = 0;
-        return *this;
-    }
+    public:
+        EBO() = default;
+        EBO(EBO&& other) noexcept;
+        EBO& operator=(EBO&& other) noexcept;
 
-    IBO::~IBO() { glDeleteBuffers(1, &_id); }
+        ~EBO();
 
-    void IBO::init(const void* vertices, unsigned int size)
-    {
-        glGenBuffers(1, &_id);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
-    }
+        void init(const void* vertices, unsigned int size);
 
-    void IBO::bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id); }
+        void bind() const;
+        void unbind() const;
 
-    void IBO::unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
-
+    private:
+        GLuint _id{ 0 };
+    };
 } // namespace BondEngine

@@ -23,67 +23,43 @@
 #include "sprite.h"
 
 #include "Texture2D.h"
-#include "shaderprogram.h"
 #include "utils.h"
 #include "vertexbuufferlayout.h"
-#include "window.h"
-
+#include "vertices.h"
 #include <glad/glad.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/mat4x4.hpp>
 
 namespace BondEngine
 {
-    struct Vertex
-    {
-        glm::vec2 position;
-        glm::vec2 texCoords;
-    };
 
-    std::vector<Vertex> vertices = { { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
-                                     { { 1.0f, 0.0f }, { 1.0f, 0.0f } },
-                                     { { 1.0f, 1.0f }, { 1.0f, 1.0f } },
-                                     { { 0.0f, 1.0f }, { 0.0f, 1.0f } } };
+    std::vector<Vertex2D> vertices = { { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
+                                       { { 1.0f, 0.0f }, { 1.0f, 0.0f } },
+                                       { { 1.0f, 1.0f }, { 1.0f, 1.0f } },
+                                       { { 0.0f, 1.0f }, { 0.0f, 1.0f } } };
 
     const GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
 
-    Sprite::Sprite(const std::shared_ptr<Texture2D>& texture) : _texture{ texture }
+    Sprite::Sprite(const std::shared_ptr<Texture2D>& texture)
     {
-        const glm::mat4 projection
-            = glm::ortho(0.f, Window::getWidth(), Window::getHeight(), 0.f, -100.f, 100.f);
-
-        _shaderProgram->use();
-        _shaderProgram->setInt("tex", 0);
-        _shaderProgram->setMatrix4("projectionMat", projection);
+        _texture = texture;
+        _shaderName = "DefaultShaderProgram";
+        _vertexCount = sizeof(indices) / sizeof(GLuint);
 
         setupBuffers();
     }
 
-    void Sprite::draw()
-    {
-        _shaderProgram->use();
-        _shaderProgram->setMatrix4("modelMat", getTransformMatrix());
-
-        _vao.bind();
-        _texture->bind();
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        _vao.unbind();
-    }
-
     void Sprite::setupBuffers()
     {
-        _vbo.init(vertices.data(), vertices.size() * sizeof(Vertex));
+        _vbo.init(vertices.data(), vertices.size() * sizeof(Vertex2D));
 
         VertexBufferLayout layout;
         layout.addElementLayoutFloat(2, false);
         layout.addElementLayoutFloat(2, false);
         _vao.addBuffer(_vbo, layout);
 
-        _ibo.init(indices, sizeof(indices));
+        _ebo.init(indices, sizeof(indices));
 
         _vao.unbind();
-        _ibo.unbind();
+        _ebo.unbind();
     }
 
 } // namespace BondEngine

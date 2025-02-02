@@ -52,6 +52,7 @@ namespace BondEngine::utils
 
     GLFWwindow* createWindow(const int width, const int height, const char* title)
     {
+        initGLFW();
         GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
         if (!window)
         {
@@ -59,6 +60,7 @@ namespace BondEngine::utils
             glfwTerminate();
             return nullptr;
         }
+
         return window;
     }
 

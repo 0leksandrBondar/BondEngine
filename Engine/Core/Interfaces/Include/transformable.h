@@ -26,13 +26,13 @@ namespace BondEngine
 
         void zoom(float scaleFactor, glm::vec2 targetPos);
 
-        [[nodiscard]] glm::vec2 getSize() const { return _size; }
-        [[nodiscard]] glm::vec2 getScale() const { return _scale; }
-        [[nodiscard]] float getRotation() const { return _rotation; }
-        [[nodiscard]] glm::vec2 getPosition() const { return _position; }
+        [[nodiscard]] glm::vec2 getSize() const noexcept { return _size; }
+        [[nodiscard]] glm::vec2 getScale() const noexcept { return _scale; }
+        [[nodiscard]] float getRotation() const noexcept { return _rotation; }
+        [[nodiscard]] glm::vec2 getPosition() const noexcept { return _position; }
         [[nodiscard]] const glm::mat4& getTransformMatrix();
 
-        void ignoreSize(bool value) noexcept { _isIgnoreSize = value; }
+        void ignoreSize(const bool value) noexcept { _isIgnoreSize = value; }
         [[nodiscard]] bool isIgnoreSize() const noexcept { return _isIgnoreSize; }
 
     protected:
