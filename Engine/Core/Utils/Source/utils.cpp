@@ -22,7 +22,8 @@
 
 #include "utils.h"
 
-#include "../../Resources/include/resourcemanager.h"
+#include "freetypelib.h"
+#include "resourcemanager.h"
 
 #include <iostream>
 #include <opengl.h>
@@ -53,6 +54,7 @@ namespace BondEngine::utils
     GLFWwindow* createWindow(const int width, const int height, const char* title)
     {
         initGLFW();
+        FreeTypeLibrary::getInstance()->initFreeTypeLibrary();
         GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
         if (!window)
         {

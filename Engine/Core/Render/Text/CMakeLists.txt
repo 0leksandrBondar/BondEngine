@@ -17,5 +17,6 @@ target_link_libraries(
         Interfaces
         Window
         OpenGlWrappers
+        freetype
 )
  
