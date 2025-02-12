@@ -22,11 +22,10 @@
 
 #pragma once
 
-#include "MouseEvents.h"
-#include "keyboardevents.h"
-#include "windowevents.h"
-
 #include "opengl.h"
+
+#include "Event.h"
+#include <functional>
 
 namespace BondEngine
 {
@@ -36,42 +35,20 @@ namespace BondEngine
         Window(int width, int height, const char* title);
         virtual ~Window() { glfwTerminate(); }
 
-        void startGameLoop();
+        void pollEvents() { glfwPollEvents(); }
+        void swapBuffers() { glfwSwapBuffers(_window); }
+        void clear(float r, float g, float b, float a = 1.0f);
 
-        [[nodiscard]] const GLFWwindow* getWindow() const;
+        void setMouseMoveCallback(const std::function<void(const Event& event)>& callback);
 
-        virtual void renderFrame() {}
-        virtual void updateFrame(const float deltaTime) {}
-
-        virtual void mouseMoveEvent(const Event& event) {}
-        virtual void mouseWheelEvent(const Event& event) {}
-        virtual void mousePressEvent(const Event& event) {}
-        virtual void mouseReleaseEvent(const Event& event) {}
-
-        virtual void keyPressEvent(const Event& event) {}
-        virtual void keyReleaseEvent(const Event& event) {}
-
-        virtual void windowCloseEvent(const Event& event) {}
-        virtual void windowResizeEvent(const Event& event) {}
-
-        static float getWidth() { return _width; };
-        static float getHeight() { return _height; };
+        [[nodiscard]] const bool isOpen() const { return !glfwWindowShouldClose(_window); }
 
     private:
-        void initCallbacks() const;
-        void handleKeyboardEvents();
-
-        static void windowCloseCallback(GLFWwindow* window);
-        static void mouseMovedCallback(GLFWwindow* window, double x, double y);
-        static void mouseScrollCallback(GLFWwindow* window, double x, double y);
-        static void windowResizeCallback(GLFWwindow* window, int width, int height);
-        static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+        static void onMouseMove(GLFWwindow* window, double x, double y);
 
     private:
-        std::string _title{};
         GLFWwindow* _window{ nullptr };
 
-    private:
-        static int _width, _height;
+        std::function<void(const Event& event)> _mouseMoveCallback;
     };
 } // namespace BondEngine

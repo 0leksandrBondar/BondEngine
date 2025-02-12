@@ -32,9 +32,7 @@ namespace BondEngine
     class Sprite final : public Drawable, public NonCopyable
     {
     public:
-        Sprite() = default;
-
-        explicit Sprite(const std::shared_ptr<Texture2D>& texture);
+        Sprite(ShaderProgram* shader, Texture2D* texture);
 
     private:
         void setupBuffers();

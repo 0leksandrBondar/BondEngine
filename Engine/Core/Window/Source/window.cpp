@@ -22,122 +22,51 @@
 
 #include "window.h"
 
-#include "MouseEvents.h"
-#include "keyboardevents.h"
-#include "timer.h"
 #include "utils.h"
-#include "windowevents.h"
+
+#include <MouseEvents.h>
 
 namespace BondEngine
 {
-    int Window::_width = 0.0f;
-    int Window::_height = 0.0f;
-
-    Window::Window(const int width, const int height, const char* title)
+    Window::Window(int width, int height, const char* title)
     {
-        _width = width;
-        _height = height;
-
         _window = utils::createWindow(width, height, title);
 
         glfwMakeContextCurrent(_window);
         glfwSetWindowUserPointer(_window, this);
 
-        initCallbacks();
+        // glfwSetWindowSizeCallback(_window, windowResizeCallback);
+        // glfwSetWindowCloseCallback(_window, windowCloseCallback);
+
+        //// keyboard events
+        // glfwSetKeyCallback(_window, keyboardButtonCallback);
+
+        //// mouse events
+        glfwSetCursorPosCallback(_window, onMouseMove);
+        // glfwSetScrollCallback(_window, mouseScrollCallback);
+        // glfwSetMouseButtonCallback(_window, mouseButtonCallback);
+
         utils::initGLAD();
-        utils::initDefaultResources();
     }
 
-    void Window::startGameLoop()
+    void Window::clear(float r, float g, float b, float a)
     {
-        Timer timer;
-        while (!glfwWindowShouldClose(_window))
+        glClearColor(r, g, b, a);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    void Window::setMouseMoveCallback(const std::function<void(const Event& event)>& callback)
+    {
+        _mouseMoveCallback = callback;
+    }
+
+    void Window::onMouseMove(GLFWwindow* window, double x, double y)
+    {
+        auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        if (windowPtr->_mouseMoveCallback)
         {
-            timer.update();
-            handleKeyboardEvents();
-
-            updateFrame(timer.getDeltaTime());
-            renderFrame();
-
-            glfwSwapBuffers(_window);
-            glfwPollEvents();
-        }
-    }
-
-    const GLFWwindow* Window::getWindow() const { return _window; }
-
-    void Window::initCallbacks() const
-    {
-        // window events
-        glfwSetWindowSizeCallback(_window, windowResizeCallback);
-        glfwSetWindowCloseCallback(_window, windowCloseCallback);
-
-        // mouse events
-        glfwSetCursorPosCallback(_window, mouseMovedCallback);
-        glfwSetScrollCallback(_window, mouseScrollCallback);
-        glfwSetMouseButtonCallback(_window, mouseButtonCallback);
-    }
-
-    void Window::handleKeyboardEvents()
-    {
-        for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key)
-        {
-            const int state = glfwGetKey(_window, key);
-            if (state == GLFW_PRESS)
-            {
-                KeyPressEvent event(key);
-                keyPressEvent(event);
-            }
-            else if (state == GLFW_RELEASE)
-            {
-                KeyReleasedEvent event(key);
-                keyReleaseEvent(event);
-            }
-        }
-    }
-
-    void Window::windowCloseCallback(GLFWwindow* window)
-    {
-        auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        const WindowClosedEvent event;
-        windowPtr->windowCloseEvent(event);
-    }
-
-    void Window::mouseMovedCallback(GLFWwindow* window, const double x, const double y)
-    {
-        auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        const MouseMovedEvent event(x, y);
-        windowPtr->mouseMoveEvent(event);
-    }
-
-    void Window::mouseScrollCallback(GLFWwindow* window, double x, double y)
-    {
-        auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        const MouseScrolledEvent event(x, y);
-        windowPtr->mouseWheelEvent(event);
-    }
-
-    void Window::windowResizeCallback(GLFWwindow* window, const int width, const int height)
-    {
-        auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        const WindowResizedEvent event(width, height);
-        windowPtr->windowResizeEvent(event);
-        glViewport(0, 0, width, height);
-    }
-
-    void Window::mouseButtonCallback(GLFWwindow* window, const int button, const int action,
-                                     int mods)
-    {
-        auto* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
-        if (action == GLFW_PRESS)
-        {
-            const MouseButtonPressedEvent event(button);
-            windowPtr->mousePressEvent(event);
-        }
-        else
-        {
-            const MouseButtonReleasedEvent event(button);
-            windowPtr->mouseReleaseEvent(event);
+            const MouseMovedEvent event(x, y);
+            windowPtr->_mouseMoveCallback(event);
         }
     }
 

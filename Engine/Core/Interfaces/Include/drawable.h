@@ -28,9 +28,6 @@
 #include "vao.h"
 #include "vbo.h"
 
-#include <memory>
-#include <string>
-
 namespace BondEngine
 {
 
@@ -46,17 +43,12 @@ namespace BondEngine
     class Drawable : public Transformable
     {
     public:
-        Drawable();
+        Drawable() = default;
 
         virtual void draw() {};
 
         [[nodiscard]] RenderData& getRenderData() { return _renderData; }
-        [[nodiscard]] std::shared_ptr<Texture2D> getTexture() const { return _texture; }
-
-        void setShaderProgram(const std::shared_ptr<ShaderProgram>& shaderProgram);
-
-    private:
-        void initDefaultShaderProgram();
+        [[nodiscard]] Texture2D* getTexture() const { return _texture; }
 
     protected:
         RenderData _renderData;
@@ -64,7 +56,6 @@ namespace BondEngine
         EBO _ebo{};
         VBO _vbo{};
 
-        std::shared_ptr<Texture2D> _texture;
-        std::shared_ptr<ShaderProgram> _shaderProgram;
+        Texture2D* _texture;
     };
 } // namespace BondEngine

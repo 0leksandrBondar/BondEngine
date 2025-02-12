@@ -47,10 +47,6 @@ namespace BondEngine
         stbi_image_free(pixels);
     }
 
-    Texture2D::Texture2D(Texture2D&& other) noexcept { *this = std::move(other); }
-
-    Texture2D::~Texture2D() { glDeleteTextures(1, &_id); }
-
     Texture2D& Texture2D::operator=(Texture2D&& other) noexcept
     {
         glDeleteTextures(1, &_id);
@@ -73,12 +69,6 @@ namespace BondEngine
 
         unbind();
     }
-
-    void Texture2D::bind() const { glBindTexture(GL_TEXTURE_2D, _id); }
-
-    void Texture2D::unbind() const { glBindTexture(GL_TEXTURE_2D, 0); }
-
-    bool Texture2D::isSmooth() const { return _smooth; }
 
     void Texture2D::initialize(const unsigned char* data, const size_t channels,
                                const GLenum filter, const GLenum wrapMode)

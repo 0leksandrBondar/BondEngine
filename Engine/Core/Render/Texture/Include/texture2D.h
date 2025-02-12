@@ -38,17 +38,17 @@ namespace BondEngine
         explicit Texture2D(const std::filesystem::path& path);
         Texture2D(GLuint width, GLuint height, const unsigned char* data, size_t channels = 4,
                   GLenum filter = GL_LINEAR, GLenum wrapMode = GL_CLAMP_TO_EDGE);
-        ~Texture2D() override;
+        ~Texture2D() override { glDeleteTextures(1, &_id); }
 
-        Texture2D(Texture2D&& other) noexcept;
+        Texture2D(Texture2D&& other) noexcept { *this = std::move(other); }
         Texture2D& operator=(Texture2D&& other) noexcept;
 
         void setSmooth(bool smooth);
 
-        void bind() const;
-        void unbind() const;
+        void bind() const { glBindTexture(GL_TEXTURE_2D, _id); }
+        void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); }
 
-        [[nodiscard]] bool isSmooth() const;
+        [[nodiscard]] bool isSmooth() const { return _smooth; }
 
     private:
         void loadTexture(const std::filesystem::path& path);

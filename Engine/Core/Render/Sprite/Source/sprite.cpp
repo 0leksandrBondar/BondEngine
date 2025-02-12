@@ -39,10 +39,10 @@ namespace BondEngine
 
     const GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
 
-    Sprite::Sprite(const std::shared_ptr<Texture2D>& texture)
+    Sprite::Sprite(ShaderProgram* shader, Texture2D* texture)
     {
         _texture = texture;
-
+        _renderData.shaderProgram = shader;
         _renderData.vertexCount = sizeof(indices) / sizeof(GLuint);
 
         setupBuffers();
@@ -50,9 +50,6 @@ namespace BondEngine
 
     void Sprite::setupBuffers()
     {
-        _renderData.shaderProgram
-            = ResourceManager::getInstance()->getShaderProgram("DefaultShaderProgram").get();
-
         _vbo.init(vertices.data(), vertices.size() * sizeof(Vertex2D));
 
         VertexBufferLayout layout;

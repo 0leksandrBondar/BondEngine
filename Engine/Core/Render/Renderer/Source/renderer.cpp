@@ -23,16 +23,15 @@
 #include "renderer.h"
 
 #include "resourcemanager.h"
-#include "shaderprogram.h"
 
 namespace BondEngine
 {
 
-    void Renderer::render(Drawable* item)
+    void Renderer::render(Drawable* item) const
     {
         const RenderData& data = item->getRenderData();
 
-        data.shaderProgram->use();
+        data.shaderProgram->activate();
 
         updateMatrix(data.shaderProgram, item->getTransformMatrix());
 
@@ -58,7 +57,8 @@ namespace BondEngine
     {
         shader->setMatrix4("modelMat", modelMat);
         shader->setMatrix4("projectionMat", _projectionMatrix);
-        shader->setMatrix4("viewMat", _camera->getTransformMatrix());
+        // shader->setMatrix4("viewMat", _camera->getTransformMatrix());
+        shader->setMatrix4("viewMat", { 1.f });
     }
 
 } // namespace BondEngine

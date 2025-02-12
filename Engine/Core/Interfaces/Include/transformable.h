@@ -22,7 +22,7 @@ namespace BondEngine
 
         void move(float x, float y);
 
-        [[deprecated]] void setSize(float width, float height);
+        void setSize(float width, float height);
 
         void zoom(float scaleFactor, glm::vec2 targetPos);
 

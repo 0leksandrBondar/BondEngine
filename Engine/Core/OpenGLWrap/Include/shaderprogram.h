@@ -28,29 +28,37 @@
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
 
+#include <filesystem>
+
 namespace BondEngine
 {
-    class ShaderProgram final : public NonCopyable
+    class ShaderProgram final
     {
     public:
-        ShaderProgram(const std::string& vertexShaderSource,
-                      const std::string& fragmentShaderSource);
-        ShaderProgram(ShaderProgram&& other) noexcept;
-        ShaderProgram& operator=(ShaderProgram&& other) noexcept;
-        ~ShaderProgram() override;
+        ShaderProgram() = default;
+        ShaderProgram(const ShaderProgram& other) = delete;
 
-        void use() const;
-        void setInt(const std::string& name, int value) const;
+        ShaderProgram(const std::filesystem::path& vertexShaderPath,
+                      const std::filesystem::path& fragmentShaderPath);
+
+        ~ShaderProgram() { glDeleteProgram(_id); }
+
+        void activate() const { glUseProgram(_id); }
+
         void setMatrix4(const std::string& name, const glm::mat4& matrix) const;
 
-        [[nodiscard]] bool isCompiled() const noexcept { return _isCompiled; }
+        [[nodiscard]] bool isCompiled() const { return _isCompiled; }
 
     private:
-        GLuint createShader(const std::string& source, GLenum shaderType);
+        void validateProgramLinking(GLuint shaderID) const;
+        void validateShaderCompilation(GLuint shaderID) const;
         void createProgram(GLuint vertexShader, GLuint fragmentShader);
+        GLuint createShader(const std::string& source, GLenum shaderType);
+
+        std::string getShaderProgramSourceCode(const std::filesystem::path& shaderProgramPath);
 
     private:
-        GLuint _programId{ 0 };
+        GLuint _id;
         bool _isCompiled{ false };
     };
 

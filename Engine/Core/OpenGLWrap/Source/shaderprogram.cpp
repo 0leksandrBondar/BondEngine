@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2024 Oleksandr
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
+// Permission is hereby granted, free of charge, to any person obtaining validateProgramLinking copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -22,16 +22,20 @@
 
 #include "shaderprogram.h"
 
-#include <ostream>
-
 #include "glm/gtc/type_ptr.hpp"
+
+#include <fstream>
+#include <iostream>
 
 namespace BondEngine
 {
 
-    ShaderProgram::ShaderProgram(const std::string& vertexShaderSource,
-                                 const std::string& fragmentShaderSource)
+    ShaderProgram::ShaderProgram(const std::filesystem::path& vertexShaderPath,
+                                 const std::filesystem::path& fragmentShaderPath)
     {
+        const std::string vertexShaderSource = getShaderProgramSourceCode(vertexShaderPath);
+        const std::string fragmentShaderSource = getShaderProgramSourceCode(fragmentShaderPath);
+
         const GLuint vertexShader = createShader(vertexShaderSource, GL_VERTEX_SHADER);
         const GLuint fragmentShader = createShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
 
@@ -41,93 +45,85 @@ namespace BondEngine
         glDeleteShader(fragmentShader);
     }
 
-    ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept { *this = std::move(other); }
-
-    ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) noexcept
+    GLuint ShaderProgram::createShader(const std::string& source, GLenum shaderType)
     {
-        if (this == &other)
-            return *this; // Self-assignment check
+        const GLuint shaderID = glCreateShader(shaderType);
+        if (shaderID == 0)
+            std::cerr << "ShaderProgram::createShader: Failed to create shader!" << std::endl;
 
-        glDeleteProgram(_programId);
+        const char* sourcePointer = source.c_str();
 
-        _programId = other._programId;
-        _isCompiled = other._isCompiled;
+        glShaderSource(shaderID, 1, &sourcePointer, nullptr);
+        glCompileShader(shaderID);
 
-        other._programId = 0;
-        other._isCompiled = false;
+        validateShaderCompilation(shaderID);
 
-        return *this;
+        return shaderID;
     }
 
-    ShaderProgram::~ShaderProgram() { glDeleteProgram(_programId); }
-
-    void ShaderProgram::use() const { glUseProgram(_programId); }
-
-    void ShaderProgram::setInt(const std::string& name, int value) const
+    std::string ShaderProgram::getShaderProgramSourceCode(
+        const std::filesystem::path& shaderProgramPath)
     {
-        glUniform1i(glGetUniformLocation(_programId, name.c_str()), value);
+        std::ifstream file(shaderProgramPath);
+        file.open(shaderProgramPath, std::ios::in | std::ios::binary);
+        if (!file.is_open())
+            throw std::runtime_error("Failed to open file " + shaderProgramPath.string());
+
+        std::stringstream ss;
+        ss << file.rdbuf();
+        return ss.str();
     }
 
     void ShaderProgram::setMatrix4(const std::string& name, const glm::mat4& matrix) const
     {
-        glUniformMatrix4fv(glGetUniformLocation(_programId, name.c_str()), 1, GL_FALSE,
-                           value_ptr(matrix));
+        glUniformMatrix4fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, value_ptr(matrix));
     }
 
-    GLuint ShaderProgram::createShader(const std::string& source, const GLenum shaderType)
+    void ShaderProgram::validateProgramLinking(GLuint shaderID) const
     {
-        const GLuint shaderID = glCreateShader(shaderType);
-        if (shaderID == 0)
+        GLint success;
+        glGetProgramiv(_id, GL_LINK_STATUS, &success);
+
+        if (!success)
         {
-            throw std::runtime_error("Failed to create shader!");
+            GLint infoLogLength;
+            glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &infoLogLength);
+            std::string infoLog(infoLogLength, ' ');
+            glGetProgramInfoLog(_id, infoLogLength, nullptr, infoLog.data());
+            glDeleteProgram(_id);
+            std::cerr << "ShaderProgram::сheckProgramLink: " + infoLog << std::endl;
         }
+    }
 
-        const char* sourcePointer = source.c_str();
-        glShaderSource(shaderID, 1, &sourcePointer, nullptr);
-        glCompileShader(shaderID);
-
+    void ShaderProgram::validateShaderCompilation(const GLuint shaderID) const
+    {
         GLint success;
         glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
-
         if (!success)
         {
             GLint infoLogLength;
             glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
             std::string infoLog(infoLogLength, ' ');
             glGetShaderInfoLog(shaderID, infoLogLength, nullptr, infoLog.data());
-            glDeleteShader(shaderID); // Delete the shader on failure
-            throw std::runtime_error("Shader compilation error:\n" + infoLog);
-        }
+            glDeleteShader(shaderID);
 
-        return shaderID;
+            std::cerr << "ShaderProgram::сheckShaderCompilation: " + infoLog << std::endl;
+        }
     }
 
     void ShaderProgram::createProgram(const GLuint vertexShader, const GLuint fragmentShader)
     {
-        _programId = glCreateProgram();
-        if (_programId == 0)
-        {
-            throw std::runtime_error("Failed to create shader program!");
-        }
+        _id = glCreateProgram();
+        if (_id == 0)
+            std::cerr << "ShaderProgram::createProgram: Failed to create program!" << std::endl;
 
-        glAttachShader(_programId, vertexShader);
-        glAttachShader(_programId, fragmentShader);
-        glLinkProgram(_programId);
+        glAttachShader(_id, vertexShader);
+        glAttachShader(_id, fragmentShader);
+        glLinkProgram(_id);
 
-        GLint success;
-        glGetProgramiv(_programId, GL_LINK_STATUS, &success);
-
-        if (!success)
-        {
-            GLint infoLogLength;
-            glGetProgramiv(_programId, GL_INFO_LOG_LENGTH, &infoLogLength);
-            std::string infoLog(infoLogLength, ' ');
-            glGetProgramInfoLog(_programId, infoLogLength, nullptr, infoLog.data());
-            glDeleteProgram(_programId); // Delete the program on failure
-            throw std::runtime_error("Shader program linking error:\n" + infoLog);
-        }
+        validateProgramLinking(_id);
 
         _isCompiled = true;
     }
 
-} // namespace engine::renderer
+} // namespace BondEngine
