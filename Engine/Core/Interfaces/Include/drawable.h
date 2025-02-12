@@ -36,6 +36,13 @@ namespace BondEngine
 
     class ShaderProgram;
 
+    struct RenderData
+    {
+        VAO vao;
+        unsigned int vertexCount{ 0 };
+        ShaderProgram* shaderProgram{ nullptr };
+    };
+
     class Drawable : public Transformable
     {
     public:
@@ -43,11 +50,8 @@ namespace BondEngine
 
         virtual void draw() {};
 
-        [[nodiscard]] VAO& getVAO() { return _vao; }
-        [[nodiscard]] std::string getShaderName() const { return _shaderName; }
+        [[nodiscard]] RenderData& getRenderData() { return _renderData; }
         [[nodiscard]] std::shared_ptr<Texture2D> getTexture() const { return _texture; }
-
-        [[nodiscard]] unsigned int getVertexCount() const { return _vertexCount; }
 
         void setShaderProgram(const std::shared_ptr<ShaderProgram>& shaderProgram);
 
@@ -55,13 +59,11 @@ namespace BondEngine
         void initDefaultShaderProgram();
 
     protected:
-        VAO _vao{};
+        RenderData _renderData;
+
         EBO _ebo{};
         VBO _vbo{};
 
-        unsigned int _vertexCount{ 0 };
-
-        std::string _shaderName{};
         std::shared_ptr<Texture2D> _texture;
         std::shared_ptr<ShaderProgram> _shaderProgram;
     };

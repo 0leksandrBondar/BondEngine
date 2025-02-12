@@ -30,23 +30,23 @@ namespace BondEngine
 
     void Renderer::render(Drawable* item)
     {
-        _shaderProgram
-            = ResourceManager::getInstance()->getShaderProgram(item->getShaderName()).get();
-        _shaderProgram->use();
+        const RenderData& data = item->getRenderData();
 
-        updateMatrix(item);
+        data.shaderProgram->use();
 
-        item->getVAO().bind();
+        updateMatrix(data.shaderProgram, item->getTransformMatrix());
+
+        data.vao.bind();
 
         if (item->getTexture() != nullptr)
             item->getTexture()->bind();
 
-        glDrawElements(GL_TRIANGLES, item->getVertexCount(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, data.vertexCount, GL_UNSIGNED_INT, nullptr);
 
         if (item->getTexture() != nullptr)
             item->getTexture()->unbind();
 
-        item->getVAO().unbind();
+        data.vao.unbind();
     }
 
     std::string Renderer::getGPUBrand()
@@ -54,11 +54,11 @@ namespace BondEngine
         return reinterpret_cast<const char*>(glGetString(GL_VENDOR));
     }
 
-    void Renderer::updateMatrix(Drawable* item) const
+    void Renderer::updateMatrix(const ShaderProgram* shader, const glm::mat4& modelMat) const
     {
-        _shaderProgram->setMatrix4("projectionMat", _projectionMatrix);
-        _shaderProgram->setMatrix4("modelMat", item->getTransformMatrix());
-        _shaderProgram->setMatrix4("viewMat", _camera->getTransformMatrix());
+        shader->setMatrix4("modelMat", modelMat);
+        shader->setMatrix4("projectionMat", _projectionMatrix);
+        shader->setMatrix4("viewMat", _camera->getTransformMatrix());
     }
 
 } // namespace BondEngine

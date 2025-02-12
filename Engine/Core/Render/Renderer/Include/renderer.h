@@ -39,7 +39,7 @@ namespace BondEngine
         [[nodiscard]] static std::string getGPUBrand();
 
     private:
-        void updateMatrix(Drawable* item) const;
+        void updateMatrix(const ShaderProgram* shader, const glm::mat4& modelMat) const;
 
     private:
         Camera2D* _camera{ nullptr };

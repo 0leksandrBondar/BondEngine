@@ -23,6 +23,7 @@
 #include "sprite.h"
 
 #include "Texture2D.h"
+#include "resourcemanager.h"
 #include "utils.h"
 #include "vertexbuufferlayout.h"
 #include "vertices.h"
@@ -41,24 +42,26 @@ namespace BondEngine
     Sprite::Sprite(const std::shared_ptr<Texture2D>& texture)
     {
         _texture = texture;
-        _shaderName = "DefaultShaderProgram";
-        _vertexCount = sizeof(indices) / sizeof(GLuint);
+
+        _renderData.vertexCount = sizeof(indices) / sizeof(GLuint);
 
         setupBuffers();
     }
 
     void Sprite::setupBuffers()
     {
+        _renderData.shaderProgram
+            = ResourceManager::getInstance()->getShaderProgram("DefaultShaderProgram").get();
+
         _vbo.init(vertices.data(), vertices.size() * sizeof(Vertex2D));
 
         VertexBufferLayout layout;
         layout.addElementLayoutFloat(2, false);
         layout.addElementLayoutFloat(2, false);
-        _vao.addBuffer(_vbo, layout);
+        _renderData.vao.addBuffer(_vbo, layout);
 
         _ebo.init(indices, sizeof(indices));
-
-        _vao.unbind();
+        _renderData.vao.unbind();
         _ebo.unbind();
     }
 
