@@ -15,7 +15,7 @@ void Window::start() const
 {
     while (_window->isOpen())
     {
-        _window->clear(0.5f, 1.0f, 0.5f);
+        _window->clear(0.2f, 0.3f, 0.3f, 1.0f);
         // renderer->render(sprite);
         _window->pollEvents();
         _window->swapBuffers();

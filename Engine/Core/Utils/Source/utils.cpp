@@ -47,8 +47,8 @@ namespace BondEngine::utils
     void initDefaultResources()
     {
         ResourceManager::getInstance()->loadShaderProgram("DefaultShaderProgram",
-                                                          "assets/Shaders/vertexSprite.vert",
-                                                          "assets/Shaders/fragmentSprite.frag");
+                                                          "assets/Shaders/Vertex2D.vert",
+                                                          "assets/Shaders/Fragment2D.frag");
     }
 
     GLFWwindow* createWindow(const int width, const int height, const char* title)
