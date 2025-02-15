@@ -22,6 +22,7 @@
 
 #include "window.h"
 
+#include "keyboardevents.h"
 #include "utils.h"
 
 #include <MouseEvents.h>
@@ -39,12 +40,12 @@ namespace BondEngine
         // glfwSetWindowCloseCallback(_window, windowCloseCallback);
 
         //// keyboard events
-        // glfwSetKeyCallback(_window, keyboardButtonCallback);
+        glfwSetKeyCallback(_window, onKeyboardButton);
 
         //// mouse events
+        glfwSetScrollCallback(_window, onMouseScroll);
         glfwSetCursorPosCallback(_window, onMouseMove);
-        // glfwSetScrollCallback(_window, mouseScrollCallback);
-        // glfwSetMouseButtonCallback(_window, mouseButtonCallback);
+        glfwSetMouseButtonCallback(_window, onMouseButton);
 
         utils::initGLAD();
     }
@@ -55,9 +56,34 @@ namespace BondEngine
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void Window::setMouseMoveCallback(const std::function<void(const Event& event)>& callback)
+    void Window::setKeyPressCallback(const InputCallback& callback)
+    {
+        _keyPressCallback = callback;
+    }
+
+    void Window::setKeyReleaseCallback(const InputCallback& callback)
+    {
+        _keyReleaseCallback = callback;
+    }
+
+    void Window::setMouseMoveCallback(const InputCallback& callback)
     {
         _mouseMoveCallback = callback;
+    }
+
+    void Window::setMousePressCallback(const InputCallback& callback)
+    {
+        _mousePressCallback = callback;
+    }
+
+    void Window::setMouseScrollCallback(const InputCallback& callback)
+    {
+        _mouseScrollCallback = callback;
+    }
+
+    void Window::setMouseReleaseCallback(const InputCallback& callback)
+    {
+        _mouseReleaseCallback = callback;
     }
 
     void Window::onMouseMove(GLFWwindow* window, double x, double y)
@@ -67,6 +93,58 @@ namespace BondEngine
         {
             const MouseMovedEvent event(x, y);
             windowPtr->_mouseMoveCallback(event);
+        }
+    }
+
+    void Window::onMouseScroll(GLFWwindow* window, double x, double y)
+    {
+        const auto windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        if (windowPtr->_mouseScrollCallback)
+        {
+            const MouseScrolledEvent event(x, y);
+            windowPtr->_mouseScrollCallback(event);
+        }
+    }
+
+    void Window::onMouseButton(GLFWwindow* window, int button, int action, int mods)
+    {
+        const auto windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        if (action == GLFW_PRESS)
+        {
+            if (windowPtr->_mousePressCallback)
+            {
+                const MouseButtonPressedEvent event(button);
+                windowPtr->_mousePressCallback(event);
+            }
+        }
+        else
+        {
+            if (windowPtr->_mouseReleaseCallback)
+            {
+                const MouseButtonReleasedEvent event(button);
+                windowPtr->_mouseReleaseCallback(event);
+            }
+        }
+    }
+
+    void Window::onKeyboardButton(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        const auto windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        if (action == GLFW_PRESS)
+        {
+            if (windowPtr->_keyPressCallback)
+            {
+                const KeyPressEvent event(key);
+                windowPtr->_keyPressCallback(event);
+            }
+        }
+        else
+        {
+            if (windowPtr->_keyReleaseCallback)
+            {
+                const KeyReleasedEvent event(key);
+                windowPtr->_keyReleaseCallback(event);
+            }
         }
     }
 

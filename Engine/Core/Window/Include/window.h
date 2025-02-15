@@ -29,26 +29,44 @@
 
 namespace BondEngine
 {
-    class Window
+    class Window final
     {
+        using InputCallback = std::function<void(const Event& event)>;
+
     public:
         Window(int width, int height, const char* title);
         virtual ~Window() { glfwTerminate(); }
 
         void pollEvents() { glfwPollEvents(); }
-        void swapBuffers() { glfwSwapBuffers(_window); }
+        void swapBuffers() const { glfwSwapBuffers(_window); }
         void clear(float r, float g, float b, float a = 1.0f);
 
-        void setMouseMoveCallback(const std::function<void(const Event& event)>& callback);
+        void setKeyPressCallback(const InputCallback& callback);
+        void setKeyReleaseCallback(const InputCallback& callback);
 
-        [[nodiscard]] const bool isOpen() const { return !glfwWindowShouldClose(_window); }
+        void setMouseMoveCallback(const InputCallback& callback);
+        void setMousePressCallback(const InputCallback& callback);
+        void setMouseScrollCallback(const InputCallback& callback);
+        void setMouseReleaseCallback(const InputCallback& callback);
+
+        [[nodiscard]] bool isOpen() const { return !glfwWindowShouldClose(_window); }
 
     private:
         static void onMouseMove(GLFWwindow* window, double x, double y);
+        static void onMouseScroll(GLFWwindow* window, double x, double y);
+        static void onMouseButton(GLFWwindow* window, int button, int action, int mods);
+        static void onKeyboardButton(GLFWwindow* window, int key, int scancode, int action,
+                                     int mods);
 
     private:
         GLFWwindow* _window{ nullptr };
 
-        std::function<void(const Event& event)> _mouseMoveCallback;
+        InputCallback _keyPressCallback;
+        InputCallback _keyReleaseCallback;
+
+        InputCallback _mouseMoveCallback;
+        InputCallback _mousePressCallback;
+        InputCallback _mouseScrollCallback;
+        InputCallback _mouseReleaseCallback;
     };
 } // namespace BondEngine

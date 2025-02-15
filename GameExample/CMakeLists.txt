@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20...3.30)
 
 project(GameExample)
 
-set(SOURCES main.cpp)
+set(SOURCES main.cpp Window.cpp Window.h)
 
 add_executable(GameExample ${SOURCES})
 
