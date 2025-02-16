@@ -74,6 +74,11 @@ namespace BondEngine
         return ss.str();
     }
 
+    void ShaderProgram::setBool(const std::string& name, bool value) const
+    {
+        glUniform1i(glGetUniformLocation(_id, name.c_str()), value ? GL_TRUE : GL_FALSE);
+    }
+
     void ShaderProgram::setMatrix4(const std::string& name, const glm::mat4& matrix) const
     {
         glUniformMatrix4fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, value_ptr(matrix));

@@ -45,6 +45,7 @@ namespace BondEngine
 
         void activate() const { glUseProgram(_id); }
 
+        void setBool(const std::string& name, bool value) const;
         void setMatrix4(const std::string& name, const glm::mat4& matrix) const;
 
         [[nodiscard]] bool isCompiled() const { return _isCompiled; }
