@@ -29,3 +29,9 @@ struct Vertex2D
     glm::vec2 position;
     glm::vec2 texCoords;
 };
+
+struct Vertex3D
+{
+    glm::vec3 position;
+    glm::vec3 texCoords;
+};
