@@ -30,16 +30,48 @@ namespace BondEngine
 
     Camera2D::Camera2D()
     {
-        //_shaderProgram = ResourceManager::getInstance()->getShaderProgram("DefaultShaderProgram");
-        //_shaderProgram->use();
-        //_shaderProgram->setMatrix4("viewMat", glm::mat4(1.0f));
         ignoreSize(true);
+        setScale({1.f, 1.f});
     }
 
-    void Camera2D::update()
+
+    void Camera2D::move(float x, float y)
     {
-        //_shaderProgram->use();
-        // _shaderProgram->setMatrix4("viewMat", getTransformMatrix());
+        Transformable::move(x, y);
+        _viewNeedsUpdate = true;
     }
+
+    void Camera2D::setPosition(const glm::vec2& pos)
+    {
+        Transformable::setPosition(pos);
+        _viewNeedsUpdate = true;
+    }
+
+    void Camera2D::setScale(const glm::vec2& scale)
+    {
+        Transformable::setScale(scale);
+        _viewNeedsUpdate = true;
+    }
+
+    void Camera2D::zoom(float factor, glm::vec2 target)
+    {
+        Transformable::zoom(factor, target);
+        _viewNeedsUpdate = true;
+    }
+
+    void Camera2D::update() {}
+
+    const glm::mat4& Camera2D::getViewMatrix()
+    {
+        if (_viewNeedsUpdate)
+        {
+            const glm::mat4& model = getTransformMatrix();
+            _viewMatrix = glm::inverse(model); // именно так должно быть
+            _viewNeedsUpdate = false;
+        }
+
+        return _viewMatrix;
+    }
+
 
 } // namespace BondEngine

@@ -36,6 +36,7 @@ namespace BondEngine
     struct RenderData
     {
         VAO vao;
+        Texture2D* texture;
         unsigned int vertexCount{ 0 };
         ShaderProgram* shaderProgram{ nullptr };
     };
@@ -48,7 +49,7 @@ namespace BondEngine
         virtual void draw() {};
 
         [[nodiscard]] RenderData& getRenderData() { return _renderData; }
-        [[nodiscard]] Texture2D* getTexture() const { return _texture; }
+        [[nodiscard]] Texture2D* getTexture() const { return _renderData.texture; }
 
     protected:
         RenderData _renderData;
@@ -56,6 +57,6 @@ namespace BondEngine
         EBO _ebo{};
         VBO _vbo{};
 
-        Texture2D* _texture;
+        //Texture2D* _texture;
     };
 } // namespace BondEngine

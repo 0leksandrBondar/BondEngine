@@ -33,6 +33,7 @@ namespace BondEngine
     {
     public:
         Sprite(ShaderProgram* shader, Texture2D* texture);
+        Sprite(ShaderProgram* shader, Texture2D* texture, size_t width, size_t height);
 
     private:
         void setupBuffers();

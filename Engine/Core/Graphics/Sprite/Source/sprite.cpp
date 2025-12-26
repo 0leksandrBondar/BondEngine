@@ -41,11 +41,21 @@ namespace BondEngine
 
     Sprite::Sprite(ShaderProgram* shader, Texture2D* texture)
     {
-        _texture = texture;
+        _renderData.texture = texture;
         _renderData.shaderProgram = shader;
         _renderData.vertexCount = sizeof(indices) / sizeof(GLuint);
 
         setupBuffers();
+    }
+
+    Sprite::Sprite(ShaderProgram* shader, Texture2D* texture, size_t width, size_t height)
+    {
+        _renderData.texture = texture;
+        _renderData.shaderProgram = shader;
+        _renderData.vertexCount = sizeof(indices) / sizeof(GLuint);
+
+        setupBuffers();
+        setSize(width, height);
     }
 
     void Sprite::setupBuffers()

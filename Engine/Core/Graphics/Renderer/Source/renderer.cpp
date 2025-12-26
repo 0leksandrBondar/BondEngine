@@ -57,8 +57,9 @@ namespace BondEngine
     {
         shader->setMatrix4("modelMat", modelMat);
         shader->setMatrix4("projectionMat", _projectionMatrix);
-        // shader->setMatrix4("viewMat", _camera->getTransformMatrix());
-        shader->setMatrix4("viewMat", { 1.f });
+        shader->setMatrix4("viewMat", _camera->getViewMatrix());
+
+        //shader->setMatrix4("viewMat", { 1.f });
     }
 
 } // namespace BondEngine

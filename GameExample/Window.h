@@ -33,4 +33,5 @@ private:
 private:
     std::shared_ptr<BondEngine::Window> _window{ nullptr };
     std::shared_ptr<BondEngine::Camera2D> _camera{ nullptr };
+    std::shared_ptr<BondEngine::Renderer> _renderer{ nullptr };
 };

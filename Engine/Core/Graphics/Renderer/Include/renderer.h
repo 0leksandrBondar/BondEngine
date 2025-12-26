@@ -44,7 +44,8 @@ namespace BondEngine
     private:
         Camera2D* _camera{ nullptr };
         ShaderProgram* _shaderProgram{ nullptr };
-        const glm::mat4 _projectionMatrix = glm::ortho(0.f, 1300.f, 800.f, 0.f, -100.f, 100.f);
+        const glm::mat4 _projectionMatrix = glm::ortho(0.f, 1300.f, 0.f, 800.f, -100.f, 100.f);
+
     };
 
 } // namespace BondEngine

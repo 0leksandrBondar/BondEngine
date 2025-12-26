@@ -37,11 +37,18 @@ namespace BondEngine
     public:
         Camera2D();
 
+        void move(float x, float y);
+        void setPosition(const glm::vec2& pos);
+        void setScale(const glm::vec2& scale);
+        void zoom(float factor, glm::vec2 target);
+
         void update() override;
 
+        [[nodiscard]] const glm::mat4& getViewMatrix();
+
     private:
-        float _speed{ 20.f };
-        std::shared_ptr<ShaderProgram> _shaderProgram;
+        mutable glm::mat4 _viewMatrix{ 1.0f };
+        mutable bool _viewNeedsUpdate{ true };
     };
 
 } // namespace BondEngine

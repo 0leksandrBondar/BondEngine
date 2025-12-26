@@ -37,7 +37,7 @@ namespace BondEngine
         Window(int width, int height, const char* title);
         virtual ~Window() { glfwTerminate(); }
 
-        void pollEvents() { glfwPollEvents(); }
+        static void pollEvents() { glfwPollEvents(); }
         void swapBuffers() const { glfwSwapBuffers(_window); }
         void clear(float r, float g, float b, float a = 1.0f);
 
