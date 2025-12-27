@@ -24,14 +24,15 @@
 
 #include "opengl.h"
 
-#include "Event.h"
-#include <functional>
+#include "renderer.h"
+#include "timer.h"
 
 namespace BondEngine
 {
     class Window final
     {
         using InputCallback = std::function<void(const Event& event)>;
+        using FrameCallback = std::function<void(const float deltaTime)>;
 
     public:
         Window(int width, int height, const char* title);
@@ -41,6 +42,12 @@ namespace BondEngine
         void swapBuffers() const { glfwSwapBuffers(_window); }
         void clear(float r, float g, float b, float a = 1.0f);
 
+        void render(Drawable* drawableItem) const;
+
+        void runMainLoop();
+
+        void setFrameCallback(const FrameCallback& frameCallback);
+
         void setKeyPressCallback(const InputCallback& callback);
         void setKeyReleaseCallback(const InputCallback& callback);
 
@@ -49,6 +56,8 @@ namespace BondEngine
         void setMouseScrollCallback(const InputCallback& callback);
         void setMouseReleaseCallback(const InputCallback& callback);
 
+        [[nodiscard]] glm::vec2 getWindowSize() const { return _windowSize; }
+        [[nodiscard]] Camera2D* getCamera() const { return _camera2D.get(); }
         [[nodiscard]] bool isOpen() const { return !glfwWindowShouldClose(_window); }
 
     private:
@@ -60,6 +69,14 @@ namespace BondEngine
 
     private:
         GLFWwindow* _window{ nullptr };
+
+        Timer _timer;
+        glm::vec2 _windowSize{ 0, 0 };
+
+        std::shared_ptr<Camera2D> _camera2D{ nullptr };
+        std::shared_ptr<Renderer> _renderer{ nullptr };
+
+        FrameCallback _frameCallback;
 
         InputCallback _keyPressCallback;
         InputCallback _keyReleaseCallback;

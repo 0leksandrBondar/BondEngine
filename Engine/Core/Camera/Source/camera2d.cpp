@@ -31,9 +31,8 @@ namespace BondEngine
     Camera2D::Camera2D()
     {
         ignoreSize(true);
-        setScale({1.f, 1.f});
+        setScale({ 1.f, 1.f });
     }
-
 
     void Camera2D::move(float x, float y)
     {
@@ -66,12 +65,12 @@ namespace BondEngine
         if (_viewNeedsUpdate)
         {
             const glm::mat4& model = getTransformMatrix();
-            _viewMatrix = glm::inverse(model); // именно так должно быть
+            _viewMatrix = glm::inverse(model);
+
             _viewNeedsUpdate = false;
         }
 
         return _viewMatrix;
     }
-
 
 } // namespace BondEngine

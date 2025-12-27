@@ -24,8 +24,16 @@
 
 #include "resourcemanager.h"
 
+#include "window.h"
+
 namespace BondEngine
 {
+    Renderer::Renderer(Camera2D* camera, Window* window) : _window(window), _camera(camera)
+    {
+        _projectionMatrix = glm::ortho(0.f, _window->getWindowSize().x,
+                                    _window->getWindowSize().y, 0.f,
+                                    -100.f, 100.f);
+    }
 
     void Renderer::render(Drawable* item) const
     {
@@ -58,8 +66,6 @@ namespace BondEngine
         shader->setMatrix4("modelMat", modelMat);
         shader->setMatrix4("projectionMat", _projectionMatrix);
         shader->setMatrix4("viewMat", _camera->getViewMatrix());
-
-        //shader->setMatrix4("viewMat", { 1.f });
     }
 
 } // namespace BondEngine

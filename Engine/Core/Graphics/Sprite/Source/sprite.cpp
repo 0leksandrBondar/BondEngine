@@ -24,7 +24,6 @@
 
 #include "Texture2D.h"
 #include "resourcemanager.h"
-#include "utils.h"
 #include "vertexbuufferlayout.h"
 #include "vertices.h"
 #include <glad/glad.h>
@@ -32,34 +31,27 @@
 namespace BondEngine
 {
 
-    std::vector<Vertex2D> vertices = { { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
-                                       { { 1.0f, 0.0f }, { 1.0f, 0.0f } },
-                                       { { 1.0f, 1.0f }, { 1.0f, 1.0f } },
-                                       { { 0.0f, 1.0f }, { 0.0f, 1.0f } } };
-
-    const GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
-
     Sprite::Sprite(ShaderProgram* shader, Texture2D* texture)
     {
-        _renderData.texture = texture;
-        _renderData.shaderProgram = shader;
-        _renderData.vertexCount = sizeof(indices) / sizeof(GLuint);
-
+        fillRenderData(shader, texture);
         setupBuffers();
     }
 
-    Sprite::Sprite(ShaderProgram* shader, Texture2D* texture, size_t width, size_t height)
+    Sprite::Sprite(ShaderProgram* shader, Texture2D* texture, const size_t width,
+                   const size_t height)
     {
-        _renderData.texture = texture;
-        _renderData.shaderProgram = shader;
-        _renderData.vertexCount = sizeof(indices) / sizeof(GLuint);
-
+        fillRenderData(shader, texture);
         setupBuffers();
         setSize(width, height);
     }
 
     void Sprite::setupBuffers()
     {
+        const std::vector<Vertex2D> vertices = { { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
+                                                 { { 1.0f, 0.0f }, { 1.0f, 0.0f } },
+                                                 { { 1.0f, 1.0f }, { 1.0f, 1.0f } },
+                                                 { { 0.0f, 1.0f }, { 0.0f, 1.0f } } };
+
         _vbo.init(vertices.data(), vertices.size() * sizeof(Vertex2D));
 
         VertexBufferLayout layout;
@@ -67,9 +59,16 @@ namespace BondEngine
         layout.addElementLayoutFloat(2, false);
         _renderData.vao.addBuffer(_vbo, layout);
 
-        _ebo.init(indices, sizeof(indices));
+        _ebo.init(_indices, sizeof(_indices));
         _renderData.vao.unbind();
         _ebo.unbind();
+    }
+
+    void Sprite::fillRenderData(ShaderProgram* shader, Texture2D* texture)
+    {
+        _renderData.texture = texture;
+        _renderData.shaderProgram = shader;
+        _renderData.vertexCount = sizeof(_indices) / sizeof(GLuint);
     }
 
 } // namespace BondEngine

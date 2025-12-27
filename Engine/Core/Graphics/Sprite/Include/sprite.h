@@ -37,5 +37,9 @@ namespace BondEngine
 
     private:
         void setupBuffers();
+        void fillRenderData(ShaderProgram* shader, Texture2D* texture);
+
+    private:
+        static constexpr GLuint _indices[] = { 0, 1, 2, 2, 3, 0 };
     };
 } // namespace BondEngine

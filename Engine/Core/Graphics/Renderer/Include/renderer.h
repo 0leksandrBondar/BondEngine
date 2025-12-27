@@ -24,15 +24,16 @@
 
 #include "Drawable.h"
 #include "camera2d.h"
-#include "window.h"
 
 namespace BondEngine
 {
+    class Window;
 
     class Renderer
     {
     public:
-        explicit Renderer(Camera2D* camera) : _camera(camera) {}
+        explicit Renderer(Camera2D* camera, Window* window);
+        ~Renderer() = default;
 
         void render(Drawable* item) const;
 
@@ -42,10 +43,10 @@ namespace BondEngine
         void updateMatrix(const ShaderProgram* shader, const glm::mat4& modelMat) const;
 
     private:
+        Window* _window{ nullptr };
         Camera2D* _camera{ nullptr };
+        glm::mat4 _projectionMatrix{};
         ShaderProgram* _shaderProgram{ nullptr };
-        const glm::mat4 _projectionMatrix = glm::ortho(0.f, 1300.f, 0.f, 800.f, -100.f, 100.f);
-
     };
 
 } // namespace BondEngine

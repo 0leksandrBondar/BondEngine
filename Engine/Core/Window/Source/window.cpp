@@ -30,6 +30,9 @@
 namespace BondEngine
 {
     Window::Window(int width, int height, const char* title)
+        : _windowSize(width, height),
+          _camera2D{ std::make_shared<Camera2D>() },
+          _renderer{ std::make_shared<Renderer>(_camera2D.get(), this) }
     {
         _window = utils::createWindow(width, height, title);
 
@@ -54,6 +57,33 @@ namespace BondEngine
     {
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    void Window::render(Drawable* drawableItem) const
+    {
+        if (_renderer)
+            _renderer->render(drawableItem);
+    }
+
+    void Window::runMainLoop()
+    {
+        while (isOpen())
+        {
+            _timer.update();
+            const float dt = _timer.getDeltaTime();
+            clear(0.2f, 0.3f, 0.3f, 1.0f);
+
+            if (_frameCallback)
+                _frameCallback(dt);
+
+            swapBuffers();
+            glfwPollEvents();
+        }
+    }
+
+    void Window::setFrameCallback(const FrameCallback& frameCallback)
+    {
+        _frameCallback = frameCallback;
     }
 
     void Window::setKeyPressCallback(const InputCallback& callback)
