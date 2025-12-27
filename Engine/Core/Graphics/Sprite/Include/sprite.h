@@ -32,12 +32,13 @@ namespace BondEngine
     class Sprite final : public Drawable, public NonCopyable
     {
     public:
+        Sprite();
         Sprite(ShaderProgram* shader, Texture2D* texture);
         Sprite(ShaderProgram* shader, Texture2D* texture, size_t width, size_t height);
 
     private:
         void setupBuffers();
-        void fillRenderData(ShaderProgram* shader, Texture2D* texture);
+        void fillRenderData(ShaderProgram* shader = nullptr, Texture2D* texture = nullptr);
 
     private:
         static constexpr GLuint _indices[] = { 0, 1, 2, 2, 3, 0 };

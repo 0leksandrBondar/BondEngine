@@ -49,10 +49,7 @@ namespace BondEngine
         void runMainLoop();
 
         void setFrameCallback(const FrameCallback& frameCallback);
-
-        void setKeyPressCallback(const InputCallback& callback);
         void setKeyPressCallback(const KeyHoldCallback& callback);
-        void setKeyReleaseCallback(const InputCallback& callback);
 
         void setMouseMoveCallback(const InputCallback& callback);
         void setMousePressCallback(const InputCallback& callback);
@@ -64,6 +61,10 @@ namespace BondEngine
         [[nodiscard]] bool isOpen() const { return !glfwWindowShouldClose(_window); }
 
     private:
+        void loadDefaultShaders();
+        void loadDefaultTextures();
+        void initializeDefaultLibData();
+
         void handleKeyboardInputEvent(float dt);
 
         static void onMouseMove(GLFWwindow* window, double x, double y);

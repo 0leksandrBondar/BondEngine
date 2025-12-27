@@ -56,7 +56,5 @@ namespace BondEngine
 
         EBO _ebo{};
         VBO _vbo{};
-
-        //Texture2D* _texture;
     };
 } // namespace BondEngine

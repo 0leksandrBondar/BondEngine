@@ -32,11 +32,8 @@ namespace BondEngine
                                             const std::filesystem::path& vertexShaderPath,
                                             const std::filesystem::path& fragmentShaderPath)
     {
-        auto shaderProgram
-            = std::make_shared<ShaderProgram>(utils::getShaderProgramSourceCode(vertexShaderPath),
-                                              utils::getShaderProgramSourceCode(
-                                                  fragmentShaderPath));
-        _shaderPrograms.emplace(shaderName, shaderProgram);
+        _shaderPrograms.emplace(shaderName, std::make_shared<ShaderProgram>(vertexShaderPath,
+                                                                            fragmentShaderPath));
     }
 
     void ResourceManager::loadTexture2D(const std::string& textureName,

@@ -23,13 +23,14 @@
 #include "window.h"
 
 #include "inputstate.h"
+#include "resourcemanager.h"
 #include "utils.h"
 
 #include <MouseEvents.h>
 
 namespace BondEngine
 {
-    Window::Window(int width, int height, const char* title)
+    Window::Window(const int width, const int height, const char* title)
         : _windowSize(width, height),
           _camera2D{ std::make_shared<Camera2D>() },
           _renderer{ std::make_shared<Renderer>(_camera2D.get(), this) }
@@ -51,6 +52,8 @@ namespace BondEngine
         glfwSetMouseButtonCallback(_window, onMouseButton);
 
         utils::initGLAD();
+
+        initializeDefaultLibData();
     }
 
     void Window::clear(float r, float g, float b, float a)
@@ -90,20 +93,10 @@ namespace BondEngine
         _frameCallback = frameCallback;
     }
 
-    // void Window::setKeyPressCallback(const InputCallback& callback)
-    // {
-    //     _keyPressCallback = callback;
-    // }
-
     void Window::setKeyPressCallback(const KeyHoldCallback& callback)
     {
         _keyHoldCallback = callback;
     }
-
-    // void Window::setKeyReleaseCallback(const InputCallback& callback)
-    // {
-    //     _keyReleaseCallback = callback;
-    // }
 
     void Window::setMouseMoveCallback(const InputCallback& callback)
     {
@@ -123,6 +116,24 @@ namespace BondEngine
     void Window::setMouseReleaseCallback(const InputCallback& callback)
     {
         _mouseReleaseCallback = callback;
+    }
+
+    void Window::loadDefaultShaders()
+    {
+        ResourceManager::getInstance()->loadShaderProgram("default", "Assets/Shaders/Vertex2D.vert",
+                                                          "Assets/Shaders/Fragment2D.frag");
+    }
+
+    void Window::loadDefaultTextures()
+    {
+        ResourceManager::getInstance()->loadTexture2D("default",
+                                                      "Assets/Textures/DefaultTexture.png");
+    }
+
+    void Window::initializeDefaultLibData()
+    {
+        loadDefaultShaders();
+        loadDefaultTextures();
     }
 
     void Window::handleKeyboardInputEvent(const float dt)

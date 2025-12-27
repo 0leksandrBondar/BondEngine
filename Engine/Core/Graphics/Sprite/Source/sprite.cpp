@@ -31,6 +31,12 @@
 namespace BondEngine
 {
 
+    Sprite::Sprite()
+    {
+        fillRenderData();
+        setupBuffers();
+    }
+
     Sprite::Sprite(ShaderProgram* shader, Texture2D* texture)
     {
         fillRenderData(shader, texture);
@@ -66,8 +72,17 @@ namespace BondEngine
 
     void Sprite::fillRenderData(ShaderProgram* shader, Texture2D* texture)
     {
-        _renderData.texture = texture;
-        _renderData.shaderProgram = shader;
+        if (texture == nullptr && shader == nullptr)
+        {
+            _renderData.shaderProgram
+                = ResourceManager::getInstance()->getShaderProgram("default").get();
+            _renderData.texture = ResourceManager::getInstance()->getTexture("default").get();
+        }
+        else
+        {
+            _renderData.texture = texture;
+            _renderData.shaderProgram = shader;
+        }
         _renderData.vertexCount = sizeof(_indices) / sizeof(GLuint);
     }
 
