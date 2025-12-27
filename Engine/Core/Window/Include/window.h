@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "inputstate.h"
 #include "opengl.h"
 
 #include "renderer.h"
@@ -33,6 +34,7 @@ namespace BondEngine
     {
         using InputCallback = std::function<void(const Event& event)>;
         using FrameCallback = std::function<void(const float deltaTime)>;
+        using KeyHoldCallback = std::function<void(KeyState&, float)>;
 
     public:
         Window(int width, int height, const char* title);
@@ -49,6 +51,7 @@ namespace BondEngine
         void setFrameCallback(const FrameCallback& frameCallback);
 
         void setKeyPressCallback(const InputCallback& callback);
+        void setKeyPressCallback(const KeyHoldCallback& callback);
         void setKeyReleaseCallback(const InputCallback& callback);
 
         void setMouseMoveCallback(const InputCallback& callback);
@@ -61,6 +64,8 @@ namespace BondEngine
         [[nodiscard]] bool isOpen() const { return !glfwWindowShouldClose(_window); }
 
     private:
+        void handleKeyboardInputEvent(float dt);
+
         static void onMouseMove(GLFWwindow* window, double x, double y);
         static void onMouseScroll(GLFWwindow* window, double x, double y);
         static void onMouseButton(GLFWwindow* window, int button, int action, int mods);
@@ -71,6 +76,7 @@ namespace BondEngine
         GLFWwindow* _window{ nullptr };
 
         Timer _timer;
+        KeyState _keyState;
         glm::vec2 _windowSize{ 0, 0 };
 
         std::shared_ptr<Camera2D> _camera2D{ nullptr };
@@ -78,8 +84,7 @@ namespace BondEngine
 
         FrameCallback _frameCallback;
 
-        InputCallback _keyPressCallback;
-        InputCallback _keyReleaseCallback;
+        KeyHoldCallback _keyHoldCallback;
 
         InputCallback _mouseMoveCallback;
         InputCallback _mousePressCallback;

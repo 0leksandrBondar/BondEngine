@@ -22,47 +22,36 @@
 
 #pragma once
 
-// TODO: add brief for class Event
-
 #include "buttonsdefenition.h"
-#include "glm/vec2.hpp"
-#include "inputstate.h"
+
+#include <unordered_map>
 
 namespace BondEngine
 {
-
-    enum class EventType
-    {
-        MouseMoved,
-        MouseScrolled,
-        MouseButtonPressed,
-        MouseButtonReleased,
-
-        KeyPressed,
-        KeyReleased,
-
-        WindowClosed,
-        WindowResized,
-    };
-
-    class Event
+    class KeyState
     {
     public:
-        explicit Event(const EventType type, int button = -1) : _type(type), _button(button) {}
-        virtual ~Event() = default;
-
-        [[nodiscard]] EventType getType() const { return _type; }
-
-        [[nodiscard]] virtual bool button(const Key button) const
+        bool isHold(const Key key)
         {
-            return false;
+            return _current[key];
         }
-        [[nodiscard]] virtual bool button(Mouse button) const { return false; }
-        [[nodiscard]] virtual glm::vec2 getZoomFactor() const { return glm::vec2(0.0f, 0.0f); }
-        [[nodiscard]] virtual glm::vec2 getMousePosition() const { return glm::vec2(0.0f, 0.0f); }
 
-    protected:
-        EventType _type{};
-        int _button{};
+        bool isPressed(const Key key)
+        {
+            return _current[key] && !_previous[key];
+        }
+
+        bool isReleased(const Key key)
+        {
+            return !_current[key] && _previous[key];
+        }
+
+    private:
+        friend class Window;
+
+        std::unordered_map<Key, bool> _current;
+        std::unordered_map<Key, bool> _previous;
     };
+
+
 } // namespace BondEngine

@@ -22,7 +22,7 @@
 
 #include "window.h"
 
-#include "keyboardevents.h"
+#include "inputstate.h"
 #include "utils.h"
 
 #include <MouseEvents.h>
@@ -73,8 +73,12 @@ namespace BondEngine
             const float dt = _timer.getDeltaTime();
             clear(0.2f, 0.3f, 0.3f, 1.0f);
 
+            handleKeyboardInputEvent(dt);
+
             if (_frameCallback)
                 _frameCallback(dt);
+
+            _keyState._previous = _keyState._current;
 
             swapBuffers();
             glfwPollEvents();
@@ -86,15 +90,20 @@ namespace BondEngine
         _frameCallback = frameCallback;
     }
 
-    void Window::setKeyPressCallback(const InputCallback& callback)
+    // void Window::setKeyPressCallback(const InputCallback& callback)
+    // {
+    //     _keyPressCallback = callback;
+    // }
+
+    void Window::setKeyPressCallback(const KeyHoldCallback& callback)
     {
-        _keyPressCallback = callback;
+        _keyHoldCallback = callback;
     }
 
-    void Window::setKeyReleaseCallback(const InputCallback& callback)
-    {
-        _keyReleaseCallback = callback;
-    }
+    // void Window::setKeyReleaseCallback(const InputCallback& callback)
+    // {
+    //     _keyReleaseCallback = callback;
+    // }
 
     void Window::setMouseMoveCallback(const InputCallback& callback)
     {
@@ -114,6 +123,12 @@ namespace BondEngine
     void Window::setMouseReleaseCallback(const InputCallback& callback)
     {
         _mouseReleaseCallback = callback;
+    }
+
+    void Window::handleKeyboardInputEvent(const float dt)
+    {
+        if (_keyHoldCallback)
+            _keyHoldCallback(_keyState, dt);
     }
 
     void Window::onMouseMove(GLFWwindow* window, double x, double y)
@@ -157,25 +172,15 @@ namespace BondEngine
         }
     }
 
-    void Window::onKeyboardButton(GLFWwindow* window, int key, int scancode, int action, int mods)
+    void Window::onKeyboardButton(GLFWwindow* window, int key, int, int action, int)
     {
-        const auto windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        auto* self = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        Key k = static_cast<Key>(key);
+
         if (action == GLFW_PRESS)
-        {
-            if (windowPtr->_keyPressCallback)
-            {
-                const KeyPressEvent event(key);
-                windowPtr->_keyPressCallback(event);
-            }
-        }
-        else
-        {
-            if (windowPtr->_keyReleaseCallback)
-            {
-                const KeyReleasedEvent event(key);
-                windowPtr->_keyReleaseCallback(event);
-            }
-        }
+            self->_keyState._current[k] = true;
+        else if (action == GLFW_RELEASE)
+            self->_keyState._current[k] = false;
     }
 
 } // namespace BondEngine

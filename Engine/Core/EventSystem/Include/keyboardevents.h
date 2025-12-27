@@ -9,7 +9,7 @@ namespace BondEngine
     public:
         explicit KeyPressEvent(int key);
 
-        bool button(Key button) const override;
+       // bool button(Key button) const override;
     };
 
     /////////////////////////////////////////////////////////

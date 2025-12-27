@@ -5,7 +5,7 @@ namespace BondEngine
 
     KeyPressEvent::KeyPressEvent(const int key) : Event(EventType::KeyPressed, key) {}
 
-    bool KeyPressEvent::button(Key button) const { return _button == static_cast<int>(button); }
+   // bool KeyPressEvent::button(const Key button) const { return Event::button(button); }
 
     KeyReleasedEvent::KeyReleasedEvent(const int key) : Event(EventType::KeyReleased, key) {}
 
