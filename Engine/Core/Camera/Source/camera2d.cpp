@@ -22,19 +22,16 @@
 
 #include "camera2d.h"
 
-#include "resourcemanager.h"
 #include "window.h"
+
+#include <iostream>
 
 namespace BondEngine
 {
 
-    Camera2D::Camera2D()
-    {
-        ignoreSize(true);
-        setScale({ 1.f, 1.f });
-    }
+    Camera2D::Camera2D() { ignoreSize(true); }
 
-    void Camera2D::move(float x, float y)
+    void Camera2D::move(const float x, const float y)
     {
         Transformable::move(x, y);
         _viewNeedsUpdate = true;
@@ -52,7 +49,7 @@ namespace BondEngine
         _viewNeedsUpdate = true;
     }
 
-    void Camera2D::zoom(float factor, glm::vec2 target)
+    void Camera2D::zoom(const float factor, const glm::vec2 target)
     {
         Transformable::zoom(factor, target);
         _viewNeedsUpdate = true;
@@ -72,5 +69,6 @@ namespace BondEngine
 
         return _viewMatrix;
     }
+
 
 } // namespace BondEngine

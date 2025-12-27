@@ -1,5 +1,8 @@
 #include "transformable.h"
 
+#include <iostream>
+#include <ostream>
+
 namespace BondEngine
 {
     void Transformable::setPosition(const glm::vec2& position)
@@ -32,7 +35,7 @@ namespace BondEngine
         _needsUpdate = true;
     }
 
-    void Transformable::zoom(float scaleFactor, glm::vec2 targetPos)
+    void Transformable::zoom(const float scaleFactor, const glm::vec2 targetPos)
     {
         _scale *= scaleFactor;
 
@@ -52,16 +55,22 @@ namespace BondEngine
 
     void Transformable::updateTransform()
     {
-        const auto rotationMatrix
-            = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.0f))
-              * glm::rotate(glm::mat4(1.0f), glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f))
-              * glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.0f));
+        const glm::vec2 size = _isIgnoreSize ? glm::vec2(1.f) : _size;
+        const glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(size * _scale, 1.0f));
 
-        glm::vec2 size = _isIgnoreSize ? glm::vec2(1.f) : _size;
+        auto rotationMatrix = glm::mat4(1.0f);
+        if (_rotation != 0.0f)
+        {
+            rotationMatrix
+                = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f * size.x * _scale.x,
+                                                            0.5f * size.y * _scale.y, 0.0f))
+                  * glm::rotate(glm::mat4(1.0f), glm::radians(_rotation), glm::vec3(0.f, 0.f, 1.f))
+                  * glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f * size.x * _scale.x,
+                                                              -0.5f * size.y * _scale.y, 0.0f));
+        }
 
-        auto scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
-        scaleMatrix = glm::scale(scaleMatrix, glm::vec3(_scale.x, _scale.y, 1.0f));
-        const auto translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
+        const glm::mat4 translationMatrix
+            = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
 
         _modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
         _needsUpdate = false;

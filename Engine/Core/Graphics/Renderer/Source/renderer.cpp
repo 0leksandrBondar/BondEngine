@@ -30,9 +30,8 @@ namespace BondEngine
 {
     Renderer::Renderer(Camera2D* camera, Window* window) : _window(window), _camera(camera)
     {
-        _projectionMatrix = glm::ortho(0.f, _window->getWindowSize().x,
-                                    _window->getWindowSize().y, 0.f,
-                                    -100.f, 100.f);
+        _projectionMatrix = glm::ortho(0.f, _window->getWindowSize().x, _window->getWindowSize().y,
+                                       0.f, -100.f, 100.f);
     }
 
     void Renderer::render(Drawable* item) const
