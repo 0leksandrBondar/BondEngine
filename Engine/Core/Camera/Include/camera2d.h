@@ -22,33 +22,49 @@
 
 #pragma once
 
-#include "shaderprogram.h"
-#include "transformable.h"
-#include "updatable.h"
-
-#include <memory>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace BondEngine
 {
-    class Event;
-
-    class Camera2D final : public Transformable, public Updatable
+    class Camera2D
     {
     public:
-        Camera2D();
+        Camera2D(float viewportWidth, float viewportHeight);
 
-        void move(float x, float y);
+        // Position
         void setPosition(const glm::vec2& pos);
-        void setScale(const glm::vec2& scale);
-        void zoom(float factor, glm::vec2 target);
+        void move(const glm::vec2& delta);
 
-        void update() override;
+        // Rotation (degrees)
+        void setRotation(float degrees);
+        void rotate(float delta);
 
-        [[nodiscard]] const glm::mat4& getViewMatrix();
+        // Zoom
+        void setZoom(float zoom);
+        void zoom(float factor);
+
+        // Viewport
+        void setViewport(float width, float height);
+
+        // Matrix
+        const glm::mat4& getViewMatrix() const;
+
+        // Getters
+        glm::vec2 getPosition() const { return _position; }
+        float getRotation() const { return _rotation; }
+        float getZoom() const { return _zoom; }
 
     private:
-        mutable glm::mat4 _viewMatrix{ 1.0f };
-        mutable bool _viewNeedsUpdate{ true };
-    };
+        void updateMatrix() const;
 
-} // namespace BondEngine
+        mutable glm::mat4 _viewMatrix{1.0f};
+        mutable bool _dirty{true};
+
+        glm::vec2 _position{0.f, 0.f};
+        float _rotation{0.f};   // degrees
+        float _zoom{1.f};
+
+        glm::vec2 _viewport{1.f, 1.f};
+    };
+}

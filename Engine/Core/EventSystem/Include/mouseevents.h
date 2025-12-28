@@ -35,7 +35,7 @@ namespace BondEngine
     public:
         explicit MouseButtonPressedEvent(int button);
 
-        bool button(Mouse button) const override;
+        [[nodiscard]] bool button(Mouse button) const override;
     };
 
     /////////////////////////////////////////////////////////
