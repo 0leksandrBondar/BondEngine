@@ -44,6 +44,9 @@ namespace BondEngine
 
         data.vao.bind();
 
+        data.shaderProgram->setVector4("spriteColor", data.color);
+        data.shaderProgram->setBool("useTexture", data.texture != nullptr);
+
         if (item->getTexture() != nullptr)
             item->getTexture()->bind();
 

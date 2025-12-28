@@ -32,7 +32,7 @@ namespace BondEngine
 {
     Window::Window(const int width, const int height, const char* title)
         : _windowSize(width, height),
-          _camera2D{ std::make_shared<Camera2D>() },
+          _camera2D{ std::make_shared<Camera2D>(width, height) },
           _renderer{ std::make_shared<Renderer>(_camera2D.get(), this) }
     {
         _window = utils::createWindow(width, height, title);

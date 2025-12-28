@@ -36,8 +36,9 @@ namespace BondEngine
     struct RenderData
     {
         VAO vao;
-        Texture2D* texture;
+        Texture2D* texture{ nullptr };
         unsigned int vertexCount{ 0 };
+        glm::vec4 color;
         ShaderProgram* shaderProgram{ nullptr };
     };
 
@@ -49,6 +50,7 @@ namespace BondEngine
         virtual void draw() {};
 
         [[nodiscard]] RenderData& getRenderData() { return _renderData; }
+        [[nodiscard]] glm::vec4 getColor() const { return _renderData.color; }
         [[nodiscard]] Texture2D* getTexture() const { return _renderData.texture; }
 
     protected:

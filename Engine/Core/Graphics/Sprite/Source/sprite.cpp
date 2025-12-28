@@ -51,6 +51,24 @@ namespace BondEngine
         setSize(width, height);
     }
 
+    void Sprite::setColor(const glm::vec4 color)
+    {
+        const glm::vec4 colorTemp = { color.x / 255, color.y / 255, color.z / 255, color.w };
+
+        _renderData.color = colorTemp;
+    }
+
+    void Sprite::setTexture(Texture2D* texture)
+    {
+        if (texture != nullptr)
+            _renderData.texture = texture;
+    }
+
+    void Sprite::useDefaultTexture()
+    {
+        _renderData.texture = ResourceManager::getInstance()->getTexture("default").get();
+    }
+
     void Sprite::setupBuffers()
     {
         const std::vector<Vertex2D> vertices = { { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
@@ -72,11 +90,10 @@ namespace BondEngine
 
     void Sprite::fillRenderData(ShaderProgram* shader, Texture2D* texture)
     {
-        if (texture == nullptr && shader == nullptr)
+        if (shader == nullptr)
         {
             _renderData.shaderProgram
                 = ResourceManager::getInstance()->getShaderProgram("default").get();
-            _renderData.texture = ResourceManager::getInstance()->getTexture("default").get();
         }
         else
         {

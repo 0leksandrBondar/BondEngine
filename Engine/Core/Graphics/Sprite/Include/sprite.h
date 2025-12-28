@@ -27,7 +27,6 @@
 
 namespace BondEngine
 {
-    class Texture2D;
 
     class Sprite final : public Drawable, public NonCopyable
     {
@@ -35,6 +34,12 @@ namespace BondEngine
         Sprite();
         Sprite(ShaderProgram* shader, Texture2D* texture);
         Sprite(ShaderProgram* shader, Texture2D* texture, size_t width, size_t height);
+
+        void setColor(glm::vec4 color);
+        void setTexture(Texture2D* texture);
+
+        // debug text remove it
+        void useDefaultTexture();
 
     private:
         void setupBuffers();
