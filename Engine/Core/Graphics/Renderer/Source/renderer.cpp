@@ -23,6 +23,7 @@
 #include "renderer.h"
 
 #include "resourcemanager.h"
+#include "shaderprogram.h"
 
 #include "window.h"
 

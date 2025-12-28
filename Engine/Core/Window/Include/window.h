@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "event.h"
 #include "inputstate.h"
 #include "opengl.h"
 
