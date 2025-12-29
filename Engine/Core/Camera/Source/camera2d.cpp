@@ -23,8 +23,6 @@
 #include "camera2d.h"
 
 #include "window.h"
-#include "Camera2D.h"
-
 #include "camera2d.h"
 
 namespace BondEngine

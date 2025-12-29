@@ -22,7 +22,7 @@
 
 #include "sprite.h"
 
-#include "Texture2D.h"
+#include "texture2D.h"
 #include "resourcemanager.h"
 #include "vertexbuufferlayout.h"
 #include "vertices.h"

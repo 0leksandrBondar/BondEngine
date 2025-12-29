@@ -23,7 +23,7 @@
 #pragma once
 
 #include "EBO.h"
-#include "Texture2D.h"
+#include "texture2D.h"
 #include "transformable.h"
 #include "vao.h"
 #include "vbo.h"

@@ -1,7 +1,7 @@
 file(
         GLOB Sources
-        "include/*.h"
-        "source/*.cpp"
+        "Include/*.h"
+        "Source/*.cpp"
 )
 
 add_library(
@@ -10,7 +10,7 @@ add_library(
 
 target_include_directories(
         ResourceManager PUBLIC
-        include)
+        Include)
 
 target_link_libraries(
         ResourceManager PUBLIC

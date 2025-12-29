@@ -23,10 +23,10 @@
 #include "window.h"
 
 #include "inputstate.h"
+#include "mouseevents.h"
 #include "resourcemanager.h"
 #include "utils.h"
 
-#include <MouseEvents.h>
 
 namespace BondEngine
 {

@@ -1,7 +1,7 @@
 file(
         GLOB Sources
-        "include/*.h"
-        "source/*.cpp"
+        "Include/*.h"
+        "Source/*.cpp"
 )
 
 add_library(
@@ -15,5 +15,5 @@ target_link_libraries(
 
 target_include_directories(
         EventSystem PUBLIC
-        include)
+        Include)
 

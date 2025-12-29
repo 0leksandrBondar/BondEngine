@@ -19,14 +19,14 @@ set_target_properties(GameExample PROPERTIES
 )
 
 add_custom_command(TARGET GameExample PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/assets"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/Assets"
         COMMENT "Creating assets directory"
 )
 
 add_custom_command(TARGET GameExample POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_SOURCE_DIR}/Engine/Assets"
-        "${CMAKE_BINARY_DIR}/bin/assets"
+        "${CMAKE_BINARY_DIR}/bin/Assets"
         COMMENT "Copying assets"
 )
 

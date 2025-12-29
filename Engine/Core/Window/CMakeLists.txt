@@ -1,8 +1,9 @@
 file(
         GLOB Sources
-        "include/*.h"
-        "source/*.cpp"
+        "Include/*.h"
+        "Source/*.cpp"
 )
+
 
 add_library(
         Window STATIC
@@ -10,7 +11,7 @@ add_library(
 
 target_include_directories(
         Window PUBLIC
-        include)
+        Include)
 
 target_link_libraries(
         Window PUBLIC
