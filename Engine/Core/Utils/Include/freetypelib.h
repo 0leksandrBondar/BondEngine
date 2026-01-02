@@ -32,8 +32,9 @@ namespace BondEngine
     class FreeTypeLibrary final : public Singleton<FreeTypeLibrary>
     {
     public:
-        ~FreeTypeLibrary() override;
+        ~FreeTypeLibrary();
         void initFreeTypeLibrary();
+        void destroyFreeTypeLibrary();
 
         FT_Library& getFreeTypeLib() { return _library; }
 

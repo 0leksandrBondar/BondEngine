@@ -27,6 +27,7 @@
 #include "resourcemanager.h"
 #include "utils.h"
 
+#include <freetypelib.h>
 
 namespace BondEngine
 {
@@ -118,6 +119,11 @@ namespace BondEngine
         _mouseReleaseCallback = callback;
     }
 
+    void Window::loadDefaultFonts()
+    {
+        ResourceManager::getInstance()->loadFont("Arial", "Assets/Fonts/Arial/arialceb.ttf");
+    }
+
     void Window::loadDefaultShaders()
     {
         ResourceManager::getInstance()->loadShaderProgram("default", "Assets/Shaders/Vertex2D.vert",
@@ -132,6 +138,8 @@ namespace BondEngine
 
     void Window::initializeDefaultLibData()
     {
+        FreeTypeLibrary::getInstance()->initFreeTypeLibrary();
+        loadDefaultFonts();
         loadDefaultShaders();
         loadDefaultTextures();
     }

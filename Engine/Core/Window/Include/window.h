@@ -62,6 +62,7 @@ namespace BondEngine
         [[nodiscard]] bool isOpen() const { return !glfwWindowShouldClose(_window); }
 
     private:
+        void loadDefaultFonts();
         void loadDefaultShaders();
         void loadDefaultTextures();
         void initializeDefaultLibData();

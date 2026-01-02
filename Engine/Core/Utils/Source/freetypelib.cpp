@@ -22,14 +22,22 @@
 
 #include "freetypelib.h"
 
+#include "resourcemanager.h"
+
 namespace BondEngine
 {
 
-    FreeTypeLibrary::~FreeTypeLibrary() { FT_Done_FreeType(_library); }
+    FreeTypeLibrary::~FreeTypeLibrary()
+    {
+        ResourceManager::getInstance()->clearFonts();
+        FT_Done_FreeType(_library);
+    }
 
     void FreeTypeLibrary::initFreeTypeLibrary()
     {
         if (FT_Init_FreeType(&_library))
             return;
     }
+
+    void FreeTypeLibrary::destroyFreeTypeLibrary() { FT_Done_FreeType(_library); }
 } // namespace BondEngine

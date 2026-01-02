@@ -22,21 +22,37 @@
 
 #pragma once
 
-#include <chrono>
+#include "glm/vec2.hpp"
+#include "texture2D.h"
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+#include <filesystem>
+#include <unordered_map>
 
 namespace BondEngine
 {
-    class Timer
+    struct Character
+    {
+        Texture2D* Texture;   // ID handle of the glyph texture
+        glm::ivec2 Bearing;   // Offset from baseline to left/top of glyph
+        unsigned int Advance; // Horizontal offset to advance to next glyph
+    };
+
+    class Font final
     {
     public:
-        Timer();
+        Font() = default;
+        explicit Font(const std::filesystem::path& path, unsigned int size = 12);
 
-        void update();
-
-        [[nodiscard]] float getDeltaTime() const { return _deltaTime; }
+        [[nodiscard]] std::unordered_map<char, Character>& getCharacters() { return _characters; };
 
     private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrameTime;
-        float _deltaTime = 0.0f;
+        void loadCharacters();
+
+    private:
+        FT_Face _face{};
+        std::unordered_map<char, Character> _characters;
     };
 } // namespace BondEngine
