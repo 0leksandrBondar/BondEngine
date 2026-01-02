@@ -47,6 +47,7 @@ namespace BondEngine
 
         void setBool(const std::string& name, bool value) const;
         void setVector4(const std::string& name, const glm::vec4& value) const;
+        void setVector3(const std::string& name, const glm::vec3& value) const;
         void setMatrix4(const std::string& name, const glm::mat4& matrix) const;
 
         [[nodiscard]] bool isCompiled() const { return _isCompiled; }

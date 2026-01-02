@@ -73,21 +73,42 @@ namespace BondEngine
     void Texture2D::initialize(const unsigned char* data, const size_t channels,
                                const GLenum filter, const GLenum wrapMode)
     {
-        if (!data)
-            throw std::runtime_error("Texture2D: Invalid image data.");
+        // if (!data)
+        //  throw std::runtime_error("Texture2D: Invalid image data.");
 
-        _format = channels == 4 ? GL_RGBA : GL_RGB;
+        GLenum internalFormat;
+        GLenum format;
+
+        if (channels == 1)
+        {
+            internalFormat = GL_RED;
+            format = GL_RED;
+        }
+        else if (channels == 3)
+        {
+            internalFormat = GL_RGB;
+            format = GL_RGB;
+        }
+        else if (channels == 4)
+        {
+            internalFormat = GL_RGBA;
+            format = GL_RGBA;
+        }
+        else
+        {
+            throw std::runtime_error("Texture2D: Unsupported channel count");
+        }
 
         glGenTextures(1, &_id);
         bind();
 
-        glTexImage2D(GL_TEXTURE_2D, 0, _format, _width, _height, 0, _format, GL_UNSIGNED_BYTE,
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, _width, _height, 0, format, GL_UNSIGNED_BYTE,
                      data);
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-        glGenerateMipmap(GL_TEXTURE_2D);
 
         unbind();
     }

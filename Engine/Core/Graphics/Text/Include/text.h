@@ -19,3 +19,27 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
+#pragma once
+
+#include "drawable.h"
+#include "font.h"
+
+namespace BondEngine
+{
+    class Text final : public Drawable
+    {
+    public:
+        Text() = default;
+        explicit Text(const char* text);
+
+        [[nodiscard]] Font& getFont() { return _font; }
+
+    private:
+        void setupBuffers();
+
+    private:
+        Font _font;
+    };
+
+} // namespace BondEngine

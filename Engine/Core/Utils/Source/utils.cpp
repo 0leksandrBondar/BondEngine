@@ -54,7 +54,7 @@ namespace BondEngine::utils
     GLFWwindow* createWindow(const int width, const int height, const char* title)
     {
         initGLFW();
-        FreeTypeLibrary::getInstance()->initFreeTypeLibrary();
+        // FreeTypeLibrary::getInstance()->initFreeTypeLibrary();
         GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
         if (!window)
         {

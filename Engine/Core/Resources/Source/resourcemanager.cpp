@@ -22,12 +22,15 @@
 
 #include "resourcemanager.h"
 
+#include "font.h"
 #include "shaderprogram.h"
 #include "texture2D.h"
 #include "utils.h"
 
 namespace BondEngine
 {
+    ResourceManager::~ResourceManager() { clear(); }
+
     void ResourceManager::loadShaderProgram(const std::string& shaderName,
                                             const std::filesystem::path& vertexShaderPath,
                                             const std::filesystem::path& fragmentShaderPath)
@@ -41,6 +44,27 @@ namespace BondEngine
     {
         auto texture = std::make_shared<Texture2D>(texturePath);
         _textures.emplace(textureName, texture);
+    }
+
+    void ResourceManager::loadFont(const std::string& fontName,
+                                   const std::filesystem::path& fontPath)
+    {
+        _fonts.emplace(fontName, std::make_shared<Font>(fontPath));
+    }
+
+    void ResourceManager::clear()
+    {
+        clearFonts();
+        clearTextures();
+        clearShaderPrograms();
+    }
+    std::shared_ptr<Font> ResourceManager::getFont(const std::string& fontName)
+    {
+        const auto it = _fonts.find(fontName);
+        if (it != _fonts.cend())
+            return it->second;
+
+        return nullptr;
     }
 
     std::shared_ptr<Texture2D> ResourceManager::getTexture(const std::string& shaderName)

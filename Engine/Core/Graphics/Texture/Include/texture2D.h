@@ -24,6 +24,7 @@
 
 #include <glad/glad.h>
 
+#include "glm/vec2.hpp"
 #include "noncopyable.h"
 
 #include <filesystem>
@@ -49,6 +50,7 @@ namespace BondEngine
         void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); }
 
         [[nodiscard]] bool isSmooth() const { return _smooth; }
+        [[nodiscard]] glm::vec2 getSize() const { return glm::vec2(_width, _height); }
 
     private:
         void loadTexture(const std::filesystem::path& path);

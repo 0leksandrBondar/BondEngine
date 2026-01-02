@@ -6,11 +6,13 @@ set(SOURCES main.cpp)
 
 add_executable(GameExample ${SOURCES})
 
-target_link_libraries(GameExample PRIVATE
+target_link_libraries(GameExample PUBLIC
         Window
         Render
         Camera
         Renderer
+        Utils
+        freetype
 )
 
 # TODO: move it to engine lib
