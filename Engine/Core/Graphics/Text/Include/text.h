@@ -24,9 +24,55 @@
 
 #include "drawable.h"
 #include "font.h"
+#include "resourcemanager.h"
+#include "vertices.h"
 
 namespace BondEngine
 {
+
+    class Glyph final : public Drawable
+    {
+    public:
+        explicit Glyph(const Character& character)
+        {
+            _renderData.texture = character.Texture;
+            _renderData.shaderProgram
+                = ResourceManager::getInstance()->getShaderProgram("default").get();
+            _renderData.color = glm::vec4(1.f);
+
+            setupMesh(character);
+        }
+
+    private:
+        void setupMesh(const Character& ch)
+        {
+            const float w = static_cast<float>(ch.Texture->getSize().x);
+            const float h = static_cast<float>(ch.Texture->getSize().y);
+
+            const std::vector<Vertex2D> vertices
+                = { { { 0.f, h }, { 0.f, 0.f } }, { { 0.f, 0.f }, { 0.f, 1.f } },
+                    { { w, 0.f }, { 1.f, 1.f } },
+
+                    { { 0.f, h }, { 0.f, 0.f } }, { { w, 0.f }, { 1.f, 1.f } },
+                    { { w, h }, { 1.f, 0.f } } };
+
+            _renderData.vertexCount = static_cast<unsigned>(vertices.size());
+
+            VertexBufferLayout layout;
+            layout.reserveElements(2);
+            layout.addElementLayoutFloat(2, false); // position
+            layout.addElementLayoutFloat(2, false); // texCoords
+
+            _renderData.vao.bind();
+            _vbo.init(vertices.data(), vertices.size() * sizeof(Vertex2D));
+            _renderData.vao.addBuffer(_vbo, layout);
+            _renderData.vao.unbind();
+
+            setSize(w, h);
+            ignoreSize(false);
+        }
+    };
+
     class Text final : public Drawable
     {
     public:

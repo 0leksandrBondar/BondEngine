@@ -13,6 +13,7 @@ target_link_libraries(GameExample PUBLIC
         Renderer
         Utils
         freetype
+        OpenGlWrappers
 )
 
 # TODO: move it to engine lib

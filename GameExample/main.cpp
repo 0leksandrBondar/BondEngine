@@ -2,8 +2,8 @@
 #include "freetypelib.h"
 #include "resourcemanager.h"
 #include "shaderprogram.h"
+#include "vertices.h"
 #include "window.h"
-
 #include <iostream>
 #include <string>
 
@@ -11,6 +11,57 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include FT_FREETYPE_H
+
+class Text : public BondEngine::Drawable
+{
+public:
+    explicit Text(const char* text) : _text(text)
+    {
+        _font = BondEngine::ResourceManager::getInstance()->getFont("Arial").get();
+    }
+
+private:
+    void initVBO()
+    {
+        auto Characters = _font->getCharacters();
+
+        for (char ch : _text)
+        {
+            BondEngine::VBO vbo;
+
+            BondEngine::Character c = Characters[ch];
+
+            auto x = 0.5;
+            const auto y = 0.8f;
+            const auto scale = 1.0f;
+
+            float xpos = x + c.Bearing.x * scale;
+            float ypos = y - (c.Texture->getSize().y - c.Bearing.y) * scale;
+
+            float w = c.Texture->getSize().x * scale;
+            float h = c.Texture->getSize().y * scale;
+            // update VBO for each character
+            float vertices[6][4]
+                = { { xpos, ypos + h, 0.0f, 0.0f },    { xpos, ypos, 0.0f, 1.0f },
+                    { xpos + w, ypos, 1.0f, 1.0f },
+
+                    { xpos, ypos + h, 0.0f, 0.0f },    { xpos + w, ypos, 1.0f, 1.0f },
+                    { xpos + w, ypos + h, 1.0f, 0.0f } };
+
+            const std::vector<Vertex2D> vertex = { { { xpos, ypos + h }, { 0.0f, 0.0f } },
+                                                   { { xpos, ypos }, { 0.0f, 1.0f } },
+                                                   { {}, {} } };
+            x += (c.Advance >> 6) * scale;
+        }
+    }
+
+    void setupBuffers() {}
+
+private:
+    std::string _text;
+    BondEngine::Font* _font{ nullptr };
+    std::unordered_map<char, BondEngine::VBO> _VBO;
+};
 
 void RenderText(const BondEngine::ShaderProgram* shader, BondEngine::Font* font, std::string text,
                 float x, float y, float scale, glm::vec3 color);
@@ -34,10 +85,6 @@ int main()
     const glm::mat4 projection = glm::ortho(0.0f, 800.f, 0.0f, 600.f);
     shader->activate();
     shader->setMatrix4("projection", projection);
-
-    BondEngine::VAO vao;
-    BondEngine::VBO vbo;
-    BondEngine::EBO ebo;
 
     BondEngine::VertexBufferLayout layout;
     layout.addElementLayoutFloat(2, false);
@@ -168,7 +215,8 @@ void RenderText(const BondEngine::ShaderProgram* shader, BondEngine::Font* font,
 //      {
 //          _window->setKeyPressCallback([this](BondEngine::KeyState& state, float deltaTime)
 //                                       { onKeyEvent(state, deltaTime); });
-//          _window->setFrameCallback([this](const float deltaTime) { onFrameEvent(deltaTime); });
+//          _window->setFrameCallback([this](const float deltaTime) { onFrameEvent(deltaTime);
+//          });
 //      }
 //
 //  private:
